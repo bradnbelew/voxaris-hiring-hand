@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization, x-api-key" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/api/staffing/brand", "destination": "/api/staffing/brand/index.js" },
+    { "source": "/health", "destination": "/api/health" },
+    { "source": "/staffing", "destination": "/staffing-embed.html" },
+    { "source": "/apply", "destination": "/apply.html" },
+    { "source": "/complete", "destination": "/complete.html" },
+    { "source": "/staffing-simple", "destination": "/staffing.html" }
+  ]
+}

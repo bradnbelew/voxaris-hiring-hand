@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, minimum-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="theme-color" content="#07080a" />
+    <title>Apply — Voxaris</title>
+
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- pdf.js from Mozilla CDN for client-side PDF text extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.js"></script>
+    <script>
+      if (window.pdfjsLib) {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.js";
+      }
+    </script>
+
+    <style>
+      /* Raycast theme */
+      :root {
+        --bg-0: #050608;
+        --bg-1: #07080a;
+        --bg-2: #0e1014;
+        --bg-3: #151820;
+        --text-primary: #f5f6f7;
+        --text-secondary: #c9ccd3;
+        --text-muted: #7c818c;
+        --text-subtle: #555962;
+        --ray-red: #ff6363;
+        --brand-color: var(--ray-red);
+        --ray-red-bright: #ff7a7a;
+        --ray-red-glow: rgba(255, 99, 99, 0.22);
+        --ray-blue: #55b3ff;
+        --ray-green: #5fc992;
+        --ray-yellow: #ffbc33;
+        --border-subtle: rgba(255, 255, 255, 0.05);
+        --border: rgba(255, 255, 255, 0.09);
+        --border-strong: rgba(255, 255, 255, 0.16);
+        --surface-1: rgba(255, 255, 255, 0.025);
+        --surface-2: rgba(255, 255, 255, 0.045);
+        --surface-3: rgba(255, 255, 255, 0.07);
+        --danger: #ef4444;
+        --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.45),
+          0 8px 28px rgba(0, 0, 0, 0.35),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        --shadow-btn: 0 1px 2px rgba(0, 0, 0, 0.4),
+          0 6px 18px rgba(255, 99, 99, 0.28),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+        --font-sans: "Inter Variable", "Inter", -apple-system,
+          BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+        --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        background: var(--bg-1);
+        color: var(--text-primary);
+        font-family: var(--font-sans);
+        font-feature-settings: "cv01", "ss03";
+        font-variation-settings: "opsz" 32;
+        font-weight: 400;
+        letter-spacing: 0.2px;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      body {
+        background:
+          radial-gradient(
+            ellipse 60% 40% at 50% 10%,
+            rgba(255, 99, 99, 0.08),
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 70% 50% at 50% 0%,
+            rgba(215, 201, 175, 0.06),
+            transparent 60%
+          ),
+          var(--bg-1);
+        position: relative;
+        overflow-x: hidden;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        top: -25%;
+        left: -20%;
+        width: 140%;
+        height: 36%;
+        background: linear-gradient(
+          100deg,
+          transparent 35%,
+          rgba(255, 99, 99, 0.05) 48%,
+          rgba(255, 99, 99, 0.09) 50%,
+          rgba(255, 99, 99, 0.05) 52%,
+          transparent 65%
+        );
+        transform: rotate(-8deg);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .wrap {
+        max-width: 580px;
+        margin: 0 auto;
+        padding: 42px 22px calc(60px + env(safe-area-inset-bottom));
+        position: relative;
+        z-index: 1;
+      }
+
+      .brand {
+        text-align: center;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 18px;
+      }
+
+      .role-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 13px 6px 11px;
+        border-radius: 9999px;
+        background: rgba(255, 99, 99, 0.08);
+        border: 1px solid rgba(255, 99, 99, 0.28);
+        color: var(--ray-red-bright);
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .role-badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--ray-red);
+        box-shadow: 0 0 10px var(--ray-red-glow);
+      }
+      .role-badge-wrap {
+        text-align: center;
+        margin-bottom: 18px;
+      }
+
+      h1 {
+        font-size: 34px;
+        line-height: 1.1;
+        margin: 0 0 12px;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+        text-align: center;
+        color: var(--text-primary);
+      }
+      .subtitle {
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+        margin: 0 0 38px;
+        letter-spacing: 0.1px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 24px 22px 22px;
+        box-shadow: var(--shadow-card);
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .field label {
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--text-muted);
+      }
+      .field label .req {
+        color: var(--ray-red-bright);
+        margin-left: 3px;
+      }
+      .field input[type="text"],
+      .field input[type="email"],
+      .field input[type="tel"],
+      .field select {
+        width: 100%;
+        padding: 13px 14px;
+        background: var(--bg-1);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 0.1px;
+        transition: border-color 160ms ease, background 160ms ease,
+          box-shadow 160ms ease;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      .field input:focus,
+      .field select:focus {
+        outline: none;
+        border-color: var(--ray-red);
+        background: var(--bg-0);
+        box-shadow: 0 0 0 3px rgba(255, 99, 99, 0.14);
+      }
+      .field input::placeholder {
+        color: var(--text-subtle);
+      }
+      .field select {
+        cursor: pointer;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'><path d='M3 5l3 3 3-3' stroke='%237c818c' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 34px;
+      }
+
+      /* Resume upload */
+      .resume-drop {
+        position: relative;
+        padding: 24px;
+        border: 1px dashed var(--border-strong);
+        border-radius: 11px;
+        background: var(--bg-1);
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 200ms ease, background 200ms ease;
+      }
+      .resume-drop:hover {
+        border-color: var(--ray-red);
+        background: rgba(255, 99, 99, 0.04);
+      }
+      .resume-drop.filled {
+        border-style: solid;
+        border-color: var(--ray-green);
+        background: rgba(95, 201, 146, 0.06);
+      }
+      .resume-drop.parsing {
+        border-style: solid;
+        border-color: var(--ray-yellow);
+        background: rgba(255, 188, 51, 0.06);
+      }
+      .resume-drop.drag-over {
+        border-style: solid;
+        border-color: var(--ray-red);
+        background: rgba(255, 99, 99, 0.08);
+        transform: scale(1.01);
+      }
+      .resume-drop input[type="file"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        pointer-events: none;
+      }
+      .resume-icon {
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+      .resume-label {
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 4px;
+        letter-spacing: 0.1px;
+      }
+      .resume-hint {
+        font-size: 11.5px;
+        color: var(--text-muted);
+        letter-spacing: 0.1px;
+      }
+      .resume-status {
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--ray-green);
+        margin-top: 8px;
+        display: none;
+        letter-spacing: 0.05em;
+      }
+      .resume-drop.parsing .resume-status { color: var(--ray-yellow); }
+      .resume-drop.filled .resume-status,
+      .resume-drop.parsing .resume-status {
+        display: block;
+      }
+
+      /* Consent */
+      .consent-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        padding: 14px 15px;
+        background: var(--bg-1);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        cursor: pointer;
+        transition: border-color 160ms ease, background 160ms ease;
+      }
+      .consent-row:hover {
+        border-color: var(--border-strong);
+        background: var(--surface-1);
+      }
+      .consent-row input[type="checkbox"] {
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+        margin-top: 1px;
+        accent-color: var(--ray-red);
+        cursor: pointer;
+      }
+      .consent-row span {
+        font-size: 12.5px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        letter-spacing: 0.1px;
+      }
+
+      /* Submit */
+      .submit {
+        margin-top: 8px;
+        padding: 15px 26px;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        color: #ffffff;
+        background: linear-gradient(180deg, var(--ray-red-bright), var(--ray-red));
+        border: 0;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 160ms ease, filter 160ms ease, box-shadow 200ms ease;
+        -webkit-appearance: none;
+        box-shadow: var(--shadow-btn);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .submit:hover:not(:disabled) {
+        transform: translateY(-1px);
+        filter: brightness(1.06);
+      }
+      .submit:active:not(:disabled) { transform: translateY(0); }
+      .submit:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        filter: saturate(0.5);
+      }
+
+      .hint-row {
+        text-align: center;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--text-subtle);
+        margin-top: 6px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .error-box {
+        display: none;
+        padding: 12px 14px;
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.32);
+        border-radius: 9px;
+        color: #fca5a5;
+        font-size: 12.5px;
+        line-height: 1.5;
+        letter-spacing: 0.1px;
+      }
+      .error-box.visible { display: block; }
+
+      @media (max-width: 540px) {
+        .wrap { padding: 30px 16px calc(42px + env(safe-area-inset-bottom)); }
+        h1 { font-size: 28px; letter-spacing: -0.4px; }
+        .subtitle { font-size: 13px; margin-bottom: 28px; }
+        form { padding: 20px 18px 18px; border-radius: 12px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div id="brand-logo-wrap" style="display:none; text-align:center; margin-bottom:12px;">
+        <img id="brand-logo" src="" alt="" style="max-height:40px; max-width:160px; object-fit:contain;" />
+      </div>
+      <div class="brand" id="brand-name">Voxaris</div>
+
+      <div class="role-badge-wrap">
+        <span class="role-badge" id="role-badge">Screening Interview</span>
+      </div>
+
+      <h1 id="page-title">Before your interview</h1>
+      <p class="subtitle">
+        Quick 2-minute form. Once you're done, you'll join Jordan for a 10-minute
+        video conversation about the role.
+      </p>
+
+      <form id="apply-form" autocomplete="on" novalidate>
+        <div class="field">
+          <label for="first_name">First name<span class="req">*</span></label>
+          <input type="text" id="first_name" name="first_name" required autocomplete="given-name" />
+        </div>
+
+        <div class="field">
+          <label for="last_name">Last name<span class="req">*</span></label>
+          <input type="text" id="last_name" name="last_name" required autocomplete="family-name" />
+        </div>
+
+        <div class="field">
+          <label for="email">Email<span class="req">*</span></label>
+          <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com" />
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone<span class="req">*</span></label>
+          <input type="tel" id="phone" name="phone" required autocomplete="tel" placeholder="(407) 555-1234" />
+        </div>
+
+        <div class="field">
+          <label for="years_experience">Years of experience<span class="req">*</span></label>
+          <select id="years_experience" name="years_experience" required>
+            <option value="">Select…</option>
+            <option value="0-1">Less than 1 year</option>
+            <option value="1-3">1 to 3 years</option>
+            <option value="3-5">3 to 5 years</option>
+            <option value="5-10">5 to 10 years</option>
+            <option value="10+">10+ years</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="most_recent_employer">Most recent employer</label>
+          <input type="text" id="most_recent_employer" name="most_recent_employer" autocomplete="organization" placeholder="Optional" />
+        </div>
+
+        <div class="field">
+          <label for="resume-file">Resume (PDF, optional)</label>
+          <div class="resume-drop" id="resume-drop">
+            <input type="file" id="resume-file" accept="application/pdf,.pdf" />
+            <div class="resume-icon">📄</div>
+            <div class="resume-label" id="resume-label">Drop your resume here or tap to browse</div>
+            <div class="resume-hint">PDF only · drag &amp; drop or click · processed locally on your device</div>
+            <div class="resume-status" id="resume-status"></div>
+          </div>
+        </div>
+
+        <label class="consent-row" for="consent-check">
+          <input type="checkbox" id="consent-check" required />
+          <span>
+            I understand this interview is conducted by an AI assistant and I
+            consent to having this session recorded so a human recruiter can
+            review it afterward. No automated hiring decision is made — a real
+            recruiter reviews every profile.
+          </span>
+        </label>
+
+        <!-- BIPA / biometric consent — required for IL, MD, and best practice
+             everywhere. Separate checkbox so BIPA consent is independently
+             auditable with its own timestamp. -->
+        <label class="consent-row" for="bipa-check">
+          <input type="checkbox" id="bipa-check" required />
+          <span>
+            I consent to the collection and analysis of my facial expressions
+            and voice characteristics during this video interview for the
+            purpose of candidate evaluation. This data is processed in real
+            time and is not stored as a biometric template after the session
+            ends. Full details:
+            <a href="/biometric-policy.html" target="_blank" rel="noopener" style="color: var(--ray-blue); text-decoration: underline;">Biometric Data Policy</a>.
+          </span>
+        </label>
+
+        <!-- ADA accommodation opt-out — federal requirement -->
+        <div style="text-align: center; margin-top: 2px;">
+          <a href="mailto:accommodations@voxaris.io?subject=Interview%20Accommodation%20Request"
+             style="font-size: 11.5px; color: var(--text-muted); text-decoration: underline; letter-spacing: 0.05em;"
+             >Need an accommodation? Request a human-led interview instead.</a>
+        </div>
+
+        <div class="error-box" id="error-box"></div>
+
+        <button type="submit" class="submit" id="submit-btn" disabled>
+          <span id="submit-label">Start interview</span>
+          <span class="arrow">→</span>
+        </button>
+
+        <div class="hint-row">Camera and mic required on the next page</div>
+      </form>
+    </div>
+
+    <script>
+      (async function loadBrand() {
+        try {
+          const params = new URLSearchParams(window.location.search)
+          const clientToken = params.get('client')
+          if (!clientToken) return
+          const res = await fetch(`/api/staffing/brand?client=${encodeURIComponent(clientToken)}`)
+          if (!res.ok) return
+          const brand = await res.json()
+          if (brand.company_name) {
+            const el = document.getElementById('brand-name')
+            if (el) el.textContent = brand.company_name
+            document.title = `Apply — ${brand.company_name}`
+          }
+          if (brand.logo_url) {
+            const wrap = document.getElementById('brand-logo-wrap')
+            const img = document.getElementById('brand-logo')
+            if (wrap && img) { img.src = brand.logo_url; wrap.style.display = 'block' }
+          }
+          if (brand.primary_color) {
+            document.documentElement.style.setProperty('--ray-red', brand.primary_color)
+            document.documentElement.style.setProperty('--brand-color', brand.primary_color)
+          }
+        } catch { /* silent — default branding shows */ }
+      })()
+
+      const qs = new URLSearchParams(location.search);
+      const URL_ROLE = qs.get("role") || "hospitality";
+      const URL_AGENCY = qs.get("agency") || "our staffing team";
+      const URL_CLIENT_TOKEN = qs.get("client") || null;
+
+      const ROLE_LABEL = {
+        hospitality: "Hotel / Banquet Server",
+        warehouse: "Warehouse Associate",
+        healthcare_admin: "Medical Admin Assistant",
+        general: "General Labor",
+      };
+      const prettyRole = ROLE_LABEL[URL_ROLE] || "Screening Interview";
+      document.getElementById("role-badge").textContent = prettyRole;
+      document.title = `Apply — ${prettyRole} — Voxaris`;
+
+      // Resume upload + PDF parse (pdf.js, client-side)
+      const resumeDrop = document.getElementById("resume-drop");
+      const resumeFile = document.getElementById("resume-file");
+      const resumeLabel = document.getElementById("resume-label");
+      const resumeStatus = document.getElementById("resume-status");
+
+      let resumeText = "";
+
+      async function parsePdf(file) {
+        if (typeof window.pdfjsLib === "undefined") {
+          throw new Error("PDF parser failed to load. Skip the resume or retry.");
+        }
+        const buf = await file.arrayBuffer();
+        const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+        let text = "";
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          const strings = content.items.map((it) => it.str).filter(Boolean);
+          text += strings.join(" ") + "\n\n";
+        }
+        return text.trim();
+      }
+
+      async function processFile(f) {
+        if (!f) return;
+
+        if (f.type !== "application/pdf" && !f.name.toLowerCase().endsWith(".pdf")) {
+          showError("Please upload a PDF. We don't support .docx or .doc here yet.");
+          return;
+        }
+        if (f.size > 8 * 1024 * 1024) {
+          showError("Resume is over 8 MB — please upload a smaller PDF.");
+          return;
+        }
+
+        hideError();
+        resumeDrop.classList.remove("filled");
+        resumeDrop.classList.add("parsing");
+        resumeLabel.textContent = "Parsing resume…";
+        resumeStatus.textContent = "EXTRACTING TEXT LOCALLY";
+
+        try {
+          const text = await parsePdf(f);
+          resumeText = text;
+          resumeDrop.classList.remove("parsing");
+          resumeDrop.classList.add("filled");
+          resumeLabel.textContent = f.name;
+          const wordCount = text.split(/\s+/).filter(Boolean).length;
+          resumeStatus.textContent = `✓ PARSED ${wordCount.toLocaleString()} WORDS — READY`;
+          validateForm();
+        } catch (err) {
+          console.error("pdf parse failed:", err);
+          resumeDrop.classList.remove("parsing", "filled");
+          resumeLabel.textContent = "Drop your resume here or tap to browse";
+          resumeStatus.textContent = "";
+          resumeText = "";
+          showError("Couldn't parse that PDF. You can skip the resume and continue.");
+        }
+      }
+
+      // Click anywhere on drop zone → open file picker
+      resumeDrop.addEventListener("click", (e) => {
+        if (e.target !== resumeFile) resumeFile.click();
+      });
+
+      // Drag-and-drop handlers
+      resumeDrop.addEventListener("dragenter", (e) => {
+        e.preventDefault();
+        resumeDrop.classList.add("drag-over");
+      });
+      resumeDrop.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        resumeDrop.classList.add("drag-over");
+      });
+      resumeDrop.addEventListener("dragleave", (e) => {
+        if (!resumeDrop.contains(e.relatedTarget)) {
+          resumeDrop.classList.remove("drag-over");
+        }
+      });
+      resumeDrop.addEventListener("drop", async (e) => {
+        e.preventDefault();
+        resumeDrop.classList.remove("drag-over");
+        const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        await processFile(f);
+      });
+
+      // File input change (from programmatic click)
+      resumeFile.addEventListener("change", async (e) => {
+        const f = e.target.files && e.target.files[0];
+        resumeFile.value = "";
+        await processFile(f);
+      });
+
+      // Form validation
+      const form = document.getElementById("apply-form");
+      const submitBtn = document.getElementById("submit-btn");
+      const errorBox = document.getElementById("error-box");
+
+      function showError(msg) {
+        errorBox.textContent = msg;
+        errorBox.classList.add("visible");
+      }
+      function hideError() {
+        errorBox.classList.remove("visible");
+      }
+
+      function validateForm() {
+        const required = ["first_name", "last_name", "email", "phone", "years_experience"];
+        const allFilled = required.every((id) => {
+          const el = document.getElementById(id);
+          return el && el.value && el.value.trim().length > 0;
+        });
+        const consent = document.getElementById("consent-check").checked;
+        const bipaConsent = document.getElementById("bipa-check").checked;
+        submitBtn.disabled = !(allFilled && consent && bipaConsent);
+      }
+
+      form.addEventListener("input", validateForm);
+      form.addEventListener("change", validateForm);
+      document.getElementById("consent-check").addEventListener("change", validateForm);
+      document.getElementById("bipa-check").addEventListener("change", validateForm);
+
+      // Submit handler
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        hideError();
+        submitBtn.disabled = true;
+        document.getElementById("submit-label").textContent = "Starting your interview…";
+
+        const firstName = document.getElementById("first_name").value.trim();
+        const lastName = document.getElementById("last_name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const yearsExp = document.getElementById("years_experience").value;
+        const mostRecentEmployer = document
+          .getElementById("most_recent_employer")
+          .value.trim();
+        const consent = document.getElementById("consent-check").checked;
+
+        if (!consent) {
+          showError("You must consent to the AI interview and recording before continuing.");
+          submitBtn.disabled = false;
+          document.getElementById("submit-label").textContent = "Start interview";
+          return;
+        }
+
+        const bipaConsent = document.getElementById("bipa-check").checked;
+        if (!bipaConsent) {
+          showError("You must consent to the biometric data analysis before continuing.");
+          submitBtn.disabled = false;
+          document.getElementById("submit-label").textContent = "Start interview";
+          return;
+        }
+
+        const now = new Date().toISOString();
+        const payload = {
+          candidate_name: `${firstName} ${lastName}`.trim(),
+          role: URL_ROLE,
+          agency_name: URL_AGENCY,
+          client_token: URL_CLIENT_TOKEN,
+          email,
+          phone,
+          years_experience: yearsExp,
+          most_recent_employer: mostRecentEmployer || null,
+          resume_text: resumeText || null,
+          consent_given: true,
+          consent_timestamp: now,
+          bipa_consent: true,
+          bipa_consent_timestamp: now,
+        };
+
+        try {
+          const r = await fetch("/api/staffing/conversations", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const data = await r.json();
+          if (!r.ok || !data.conversation_url) {
+            throw new Error(data.error || "Couldn't start the interview.");
+          }
+
+          const params = new URLSearchParams({
+            conversation_id: data.conversation_id,
+            conversation_url: data.conversation_url,
+            candidate_name: payload.candidate_name,
+            role: URL_ROLE,
+            agency: URL_AGENCY,
+            prefetched: "1",
+          });
+          if (URL_CLIENT_TOKEN) params.set("client", URL_CLIENT_TOKEN);
+          // Pass the Daily meeting token through separately — Daily.js
+          // requires it as a distinct `token` param in join(), not baked
+          // into the URL. Stash it in sessionStorage since it's short-lived
+          // and shouldn't sit in the URL bar.
+          if (data.meeting_token) {
+            try {
+              sessionStorage.setItem(
+                "voxaris_meeting_token_" + data.conversation_id,
+                data.meeting_token
+              );
+            } catch (_) {}
+          }
+          location.href = `/staffing-embed.html?${params.toString()}`;
+        } catch (err) {
+          console.error("apply submit failed:", err);
+          showError(err.message || "Something went wrong. Try again in a moment.");
+          submitBtn.disabled = false;
+          document.getElementById("submit-label").textContent = "Start interview";
+        }
+      });
+    </script>
+  </body>
+</html>
