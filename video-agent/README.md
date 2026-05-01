@@ -48,6 +48,17 @@ Powered by **Phoenix-4** replica (Benjamin Office for Jordan; Rose Office as fem
 
 /supabase/schema.sql                   Postgres schema (shared with dashboard)
 
+/scripts                               Persona maintenance utilities (see scripts/README.md)
+  /patch-personas-v2.js                Push personas/jordan.json to live persona (--dry-run supported)
+  /test-conversation.js                Sanity test — create real Tavus conversation
+  /test-patch-personas.js              Exercise patch-persona flow against live Tavus
+  /patch-compliance.js                 Prepend AI disclosure preamble (FL/IL/NYC compliance)
+  /patch-context-merge.js              Migrate deprecated /context → /system_prompt
+  /patch-emotion-prompts.js            Phoenix-4 micro-expressions + Cartesia SSML
+  /patch-perception-tools.js           Populate Raven-1 visual_tools + audio_tools
+  /patch-phase1-tools.js               Push save_candidate_screening tool def
+  /patch-schema-modernization.js       Full Tavus schema modernization pass
+
 /vercel.json                           version 2, 30s maxDuration, CORS, rewrites
 /package.json                          Deps: @supabase/supabase-js, dotenv
 /.env.example                          All env vars
