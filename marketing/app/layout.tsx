@@ -146,7 +146,15 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <a
+          href="#hero"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-accent focus:text-ink focus:px-4 focus:py-2 focus:rounded-full focus:text-[12px] focus:font-mono focus:uppercase focus:tracking-[0.15em]"
+        >
+          Skip to content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }
