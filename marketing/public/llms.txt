@@ -1,0 +1,52 @@
+# Hiring Hand
+
+> Hiring Hand is an AI video hiring agent. It conducts structured, EEOC-compliant first-round interviews with every applicant — video-first, in 47 languages — and delivers a scored candidate card with summary, strengths, concerns, and a scrubbable transcript to a recruiter dashboard. Built by Voxaris LLC.
+
+## What it does
+
+- Replaces first-round phone/video screens for high-volume hourly and structured-skill roles
+- Covers hospitality, healthcare support (CNA/HHA), light industrial, warehouse, retail, and dispatch
+- Runs 24/7 — applicants get a callback within 60 seconds of submitting
+- Uses Tavus (conversational video), tavus-harmony-3 LLM, Cartesia TTS, Deepgram STT, Raven-1 perception
+- EEOC compliant; built to satisfy BIPA, IL AIVIA, NYC AEDT, FL SB 482
+
+## Who it's for
+
+- Staffing agencies running hospitality / industrial / healthcare-support placements
+- Mid-market employers with high churn front-line workforces
+- Enterprise talent-acquisition teams that want to recover the ~60% of recruiter time spent on first-round screens
+
+## Key pages
+
+- [Home](https://hiringhand.io/): product overview, dashboard preview, how-it-works, FAQ, demo CTA
+- [Try it live (sandbox)](https://hiringhand.io/talk): take the candidate-side experience
+- [Privacy Policy](https://hiringhand.io/privacy): how candidate and client data is handled
+- [Biometric Policy](https://hiringhand.io/biometric-policy): BIPA / IL AIVIA conformance
+- [Compliance](https://hiringhand.io/compliance): EEOC, NYC AEDT, FL SB 482, EU AI Act stance
+
+## Operational facts
+
+- Average time to scored shortlist: 14 minutes
+- Default data retention: 90 days, configurable per client contract
+- ATS integration: webhook (Greenhouse, Lever, BambooHR, ICIMS, custom) or candidate-side iframe embed
+- Languages: 47, candidate selects at session start; transcripts stored in original + English translation
+- Pricing: per-interview, per-role, or unlimited monthly tier; sized to replace 1–3 full-time recruiters
+
+## Compliance posture
+
+- AI disclosure delivered as Jordan's first non-skippable turn in every session
+- Affirmative consent required before interview proceeds
+- No automated hiring decision — human recruiter reviews every output
+- No biometric identifiers (face/voice prints suitable for out-of-session identification) generated
+- Interview content not used to train general-purpose AI models
+- Not sold to third parties
+
+## Operator
+
+Voxaris LLC, Orlando + Nashville. Contact: hello@hiringhand.io.
+
+## Sister products
+
+- voxaris.io (parent brand)
+- Voxaris AEO Outreach (AI search visibility)
+- Voxaris Audit (GEO/AEO audits)
