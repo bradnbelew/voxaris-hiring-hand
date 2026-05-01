@@ -40,10 +40,10 @@ const FAQS = [
 
 export function FAQ() {
   return (
-    <section className="bg-paper text-ink py-24 md:py-32 px-6 md:px-10 border-t border-paper-2">
+    <section id="faq" className="bg-paper text-ink py-24 md:py-32 px-6 md:px-10 border-t border-paper-2">
       <div className="max-w-4xl mx-auto">
         <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-ink/50 mb-6">
-          Anticipated objections · 06
+          Anticipated objections · 08
         </div>
 
         <h2 className="font-sans font-semibold tracking-[-0.02em] text-[clamp(2rem,5vw,3.75rem)] leading-[1.05] max-w-[18ch]">

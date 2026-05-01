@@ -41,7 +41,7 @@ export function ProofSection() {
     >
       <div className="max-w-6xl mx-auto">
         <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-ink/50 mb-6">
-          Proof · 04
+          Proof · 05
         </div>
 
         <h2 className="font-sans font-semibold tracking-[-0.02em] text-[clamp(2rem,5vw,4.25rem)] leading-[1.02] max-w-[20ch]">
@@ -109,7 +109,7 @@ export function ProofSection() {
         {/* Use cases */}
         <div className="mt-24">
           <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-ink/50 mb-6">
-            Built for · 04b
+            Built for · 05b
           </div>
           <h3 className="font-sans font-semibold tracking-[-0.02em] text-[clamp(1.6rem,3.5vw,2.75rem)] leading-tight max-w-[24ch]">
             High-volume hiring is the same problem in three jobs.

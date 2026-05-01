@@ -11,7 +11,7 @@ export function CTASection() {
 
       <div className="relative max-w-4xl mx-auto text-center">
         <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-accent mb-8">
-          Two ways to start · 05
+          Two ways to start · 09
         </div>
 
         <h2 className="font-sans font-semibold tracking-[-0.02em] text-[clamp(2.5rem,7vw,6rem)] leading-[0.95]">

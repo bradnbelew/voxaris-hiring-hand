@@ -89,3 +89,25 @@ html, body {
 .scroll-hint {
   animation: scroll-hint 2s ease-in-out infinite;
 }
+
+/* Smooth anchor scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .drift-up,
+  .scroll-hint,
+  .cursor-blink::after {
+    animation: none !important;
+  }
+}
