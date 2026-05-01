@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: var(--font-serif), "Iowan Old Style", "Times New Roman", serif;
+
+  --color-paper: #f4efe6;
+  --color-paper-2: #ebe5d9;
+  --color-ink: #1b1b1b;
+  --color-ink-soft: #4a4a4a;
+  --color-ink-faint: #8a8a8a;
+
+  --color-alarm: #e63946;
+  --color-amber: #f4a52a;
+  --color-canary: #ffd166;
+  --color-electric: #ff3b6f;
+
+  --color-jordan-bg: #14171f;
+  --color-jordan-bg-2: #1f2330;
+  --color-jordan-glow: #cfd6e6;
+}
+
+html, body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-electric);
+  color: var(--color-paper);
+}
+
+/* Subtle paper grain on the chaos side */
+.paper-grain {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+@keyframes shake-tiny {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(-1px, 1px) rotate(-0.4deg); }
+  50% { transform: translate(1px, -1px) rotate(0.5deg); }
+  75% { transform: translate(-1px, -1px) rotate(-0.3deg); }
+}
+
+@keyframes ring {
+  0%, 100% { transform: rotate(0deg); }
+  10% { transform: rotate(-8deg); }
+  20% { transform: rotate(8deg); }
+  30% { transform: rotate(-6deg); }
+  40% { transform: rotate(6deg); }
+  50% { transform: rotate(0deg); }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.015); }
+}
+
+.scrolling-text {
+  animation: marquee-up 18s linear infinite;
+}
+
+@keyframes marquee-up {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}

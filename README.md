@@ -8,6 +8,7 @@ This repo holds two independently deployable apps that share a single Supabase d
 |---|---|---|
 | [`video-agent/`](./video-agent) | Tavus CVI staffing interviewer (Vercel serverless functions + static HTML embeds) | Vercel project |
 | [`dashboard/`](./dashboard) | Next.js App Router admin panel (auth, session viewer, billing) | Vercel project |
+| [`marketing/`](./marketing) | Next.js 16 marketing site for [hiringhand.io](https://hiringhand.io) — split-screen "chaos vs. Jordan" homepage | Vercel project |
 
 The two pieces are **not** glued at the code level — they're glued at the **data layer**:
 
