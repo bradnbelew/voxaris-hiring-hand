@@ -102,26 +102,13 @@ export default function PrivacyPage() {
       </p>
 
       <h2>Subprocessors</h2>
-      <ul>
-        <li>
-          <strong>Tavus:</strong> conversational video infrastructure. Tavus
-          processes video and audio in real time during the interview session.
-        </li>
-        <li>
-          <strong>Cartesia:</strong> text-to-speech for Jordan&apos;s voice.
-        </li>
-        <li>
-          <strong>Deepgram:</strong> speech-to-text transcription.
-        </li>
-        <li>
-          <strong>Supabase:</strong> Postgres database for transcripts and
-          candidate cards.
-        </li>
-        <li>
-          <strong>Vercel:</strong> hosting for hiringhand.io and the candidate
-          interview surface.
-        </li>
-      </ul>
+      <p>
+        We rely on a small set of vetted infrastructure providers for video
+        and audio processing, speech-to-text transcription, encrypted database
+        storage, and hosting. A current list of subprocessors with descriptions
+        of their role is available on request to{" "}
+        <a href="mailto:privacy@hiringhand.io">privacy@hiringhand.io</a>.
+      </p>
 
       <h2>Contact</h2>
       <p>

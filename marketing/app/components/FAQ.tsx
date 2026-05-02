@@ -34,7 +34,7 @@ const FAQS = [
   },
   {
     q: "Where is candidate data stored, and for how long?",
-    a: "Tavus handles video infra; transcripts and structured candidate data live in our Supabase instance (US-East), encrypted at rest. Default retention is 90 days post-interview, configurable per client. Candidates can request deletion at any time per CCPA/GDPR.",
+    a: "Transcripts and structured candidate data are stored in a SOC 2-aligned database (US-East), encrypted at rest. Video sessions are processed by enterprise-grade infrastructure. Default retention is 90 days post-interview, configurable per client. Candidates can request deletion at any time per CCPA/GDPR.",
   },
 ];
 

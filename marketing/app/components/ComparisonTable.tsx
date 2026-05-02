@@ -47,15 +47,15 @@ const ROWS = [
   },
   {
     label: "Marginal cost per interview",
-    hh: "Low",
+    hh: "Under $5",
     recruiter: "$60–120",
     ats: "$0",
     chatbot: "Low",
   },
   {
     label: "Cost annually (1,000 hires)",
-    hh: "—",
-    recruiter: "$60K+ recruiter salary",
+    hh: "Fraction of one recruiter",
+    recruiter: "$60K+ salary alone",
     ats: "Sunk software cost",
     chatbot: "Software cost",
   },

@@ -1,6 +1,5 @@
 import { Header } from "./components/Header";
-import { Hero } from "./components/Hero";
-import { ProblemSection } from "./components/ProblemSection";
+import { CandidateWall } from "./components/CandidateWall";
 import { DashboardPreview } from "./components/DashboardPreview";
 import { HowItWorks } from "./components/HowItWorks";
 import { ComparisonTable } from "./components/ComparisonTable";
@@ -19,8 +18,7 @@ export default function Home() {
       <Header />
       <ScrollRail />
 
-      <Hero />
-      <ProblemSection />
+      <CandidateWall />
       <DashboardPreview />
       <HowItWorks />
       <ComparisonTable />

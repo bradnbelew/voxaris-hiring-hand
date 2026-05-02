@@ -55,7 +55,7 @@ export function Footer() {
         <div className="mt-14 pt-6 border-t border-line/40 flex flex-col md:flex-row md:items-center md:justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/35">
           <span>© {new Date().getFullYear()} Voxaris LLC</span>
           <span>
-            Powered by Tavus · Cartesia · Deepgram · Raven-1
+            Built by Voxaris · Made in Nashville
           </span>
         </div>
       </div>

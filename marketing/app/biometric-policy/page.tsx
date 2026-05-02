@@ -89,8 +89,8 @@ export default function BiometricPage() {
       <ul>
         <li>The client whose role the candidate applied to.</li>
         <li>
-          Our subprocessors (Tavus, Cartesia, Deepgram, Supabase, Vercel) under
-          contractual confidentiality.
+          Our infrastructure subprocessors (video, transcription, storage, hosting) under
+          contractual confidentiality. A current list is available on request.
         </li>
         <li>
           Law enforcement, only in response to valid legal process.

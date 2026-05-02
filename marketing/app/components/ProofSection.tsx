@@ -3,13 +3,13 @@
 import { motion } from "motion/react";
 
 const LOG_LINES = [
-  { ok: true, time: "14:02:11", who: "Maria · Banquet Server", score: "8.4", routed: "Lisa @ Anchor Hospitality" },
-  { ok: true, time: "14:02:43", who: "Devon · Forklift Op", score: "7.1", routed: "Marcus @ GulfWorks" },
-  { warn: true, time: "14:03:08", note: "candidate paused — Jordan rephrased question" },
-  { ok: true, time: "14:03:51", who: "Aisha · CNA", score: "9.1", routed: "strong-signal queue", strong: true },
-  { ok: true, time: "14:04:22", who: "Jose · Banquet Server", score: "8.0", routed: "Lisa @ Anchor Hospitality" },
-  { warn: true, time: "14:05:00", note: "Spanish-bilingual flag detected — added to recruiter notes" },
-  { ok: true, time: "14:05:48", who: "Tasha · Banquet Server", score: "7.8", routed: "Lisa @ Anchor Hospitality" },
+  { ok: true, time: "Mon 09:18", who: "Aisha P. · CSR", score: "9.2", routed: "strong-signal queue", strong: true },
+  { ok: true, time: "Mon 09:31", who: "Devon R. · CSR", score: "7.4", routed: "Lisa @ Northbay" },
+  { warn: true, time: "Mon 09:42", note: "candidate paused — Jordan rephrased question" },
+  { ok: true, time: "Mon 10:07", who: "Jose D. · CSR", score: "8.0", routed: "Lisa @ Northbay" },
+  { warn: true, time: "Mon 10:14", note: "Spanish-bilingual flag detected — added to recruiter notes" },
+  { ok: true, time: "Mon 11:02", who: "Tasha L. · CSR", score: "7.8", routed: "Lisa @ Northbay" },
+  { ok: true, time: "Mon 11:46", who: "Maria V. · CSR", score: "8.4", routed: "Lisa @ Northbay" },
 ];
 
 const USE_CASES = [
@@ -45,17 +45,22 @@ export function ProofSection() {
         </div>
 
         <h2 className="font-sans font-semibold tracking-[-0.02em] text-[clamp(2rem,5vw,4.25rem)] leading-[1.02] max-w-[20ch]">
-          What Jordan is doing{" "}
-          <span className="font-serif italic font-normal">right now.</span>
+          One role.{" "}
+          <span className="font-serif italic font-normal">One week.</span>
         </h2>
+        <p className="mt-6 text-ink/65 max-w-xl text-[16px] leading-relaxed">
+          A typical week on a single Customer Service Rep posting at a mid-market client.
+          Numbers are illustrative — Jordan&apos;s actual throughput is bounded only by
+          how fast applications come in.
+        </p>
 
         {/* Stat strip */}
         <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6">
           {[
-            ["23", "Interviews live"],
-            ["487", "Roles screened today"],
-            ["14m", "Avg time to shortlist"],
-            ["47", "Languages supported"],
+            ["1,420", "Applicants interviewed"],
+            ["100%", "Reached a real screen"],
+            ["14m", "Avg time-to-shortlist"],
+            ["38", "Hires across the week"],
           ].map(([val, label]) => (
             <div key={label} className="border-l-2 border-accent pl-4">
               <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-ink/55">
@@ -68,7 +73,7 @@ export function ProofSection() {
           ))}
         </div>
 
-        {/* Live ops terminal */}
+        {/* Sample run terminal */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -77,10 +82,10 @@ export function ProofSection() {
           className="mt-12 bg-ink text-paper rounded-xl p-6 font-mono text-[12px] leading-relaxed shadow-[0_30px_60px_-30px_rgba(0,0,0,0.4)]"
         >
           <div className="flex items-center justify-between mb-4 text-paper/45">
-            <span>$ tail -f hiringhand.live</span>
+            <span>$ cat hiringhand.run --role=csr --day=mon</span>
             <span className="flex items-center gap-2 text-accent">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              streaming
+              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+              sample run
             </span>
           </div>
           {LOG_LINES.map((l, i) => (

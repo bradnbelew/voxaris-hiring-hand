@@ -56,16 +56,16 @@ export function Hero() {
           >
             <Link
               href="/talk"
-              className="group inline-flex items-center gap-3 px-6 py-3.5 bg-accent hover:bg-accent-2 text-ink rounded-full text-[14px] font-medium transition"
+              className="group inline-flex items-center gap-3 px-6 py-3.5 bg-violet-600 hover:bg-violet-700 text-white rounded-full text-[14px] font-medium transition shadow-[0_10px_30px_-8px_rgba(124,58,237,0.55)]"
             >
               See a sample interview
               <span className="text-lg group-hover:translate-x-0.5 transition-transform">→</span>
             </Link>
             <Link
-              href="#problem"
+              href="#split"
               className="text-[13px] font-mono uppercase tracking-[0.15em] text-paper/60 hover:text-paper transition"
             >
-              Or scroll to the math
+              Or watch the day
             </Link>
           </motion.div>
 

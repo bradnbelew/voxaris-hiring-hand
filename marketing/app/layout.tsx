@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     "EEOC compliant interview",
     "candidate scoring",
     "high-volume hiring",
-    "Tavus video agent",
+    "automotive dealership hiring",
   ],
   category: "business",
   alternates: {

@@ -6,7 +6,7 @@ const STEPS = [
   {
     when: "Day 0",
     label: "You book",
-    body: "20-minute discovery call. We bring a real Tavus session and run Jordan against one of your live job specs.",
+    body: "20-minute discovery call. We run a real Jordan interview against one of your live job specs so you can see the output before you commit.",
   },
   {
     when: "Day 3",
@@ -29,7 +29,7 @@ export function AfterBooking() {
   return (
     <section id="onboarding" className="bg-ink text-paper py-24 md:py-32 px-6 md:px-10 border-t border-line/40">
       <div className="max-w-5xl mx-auto">
-        <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-accent mb-6">
+        <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-violet-400 mb-6">
           Onboarding · 07
         </div>
         <h2 className="font-sans font-semibold tracking-[-0.02em] text-[clamp(2rem,5vw,3.75rem)] leading-[1.05] max-w-[20ch]">

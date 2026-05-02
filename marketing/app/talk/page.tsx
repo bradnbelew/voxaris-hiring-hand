@@ -62,7 +62,7 @@ export default function TalkPage() {
               </div>
               <div className="flex items-baseline gap-3">
                 <span className="text-paper/85 text-[15px]">
-                  Wiring up to live Tavus persona
+                  Wiring up the live interview persona
                 </span>
                 <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-paper/40">
                   in progress

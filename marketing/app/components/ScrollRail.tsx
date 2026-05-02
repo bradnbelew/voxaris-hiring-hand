@@ -5,7 +5,6 @@ import Link from "next/link";
 
 const SECTIONS = [
   { id: "hero", label: "Intro" },
-  { id: "problem", label: "Problem" },
   { id: "product", label: "Product" },
   { id: "how", label: "How" },
   { id: "compare", label: "Compare" },
@@ -59,8 +58,8 @@ export function ScrollRail() {
             <span
               className={`text-[10px] font-mono uppercase tracking-[0.18em] transition-all ${
                 isActive
-                  ? "opacity-100 text-accent"
-                  : "opacity-0 -translate-x-1 group-hover:opacity-60 group-hover:translate-x-0 text-current mix-blend-difference"
+                  ? "opacity-100 text-violet-300"
+                  : "opacity-0 -translate-x-1 group-hover:opacity-70 group-hover:translate-x-0 text-paper/65"
               }`}
             >
               {s.label}
@@ -68,8 +67,8 @@ export function ScrollRail() {
             <span
               className={`block h-px transition-all duration-500 ${
                 isActive
-                  ? "w-8 bg-accent shadow-[0_0_8px_var(--color-accent)]"
-                  : "w-4 bg-current opacity-40 mix-blend-difference group-hover:w-6 group-hover:opacity-70"
+                  ? "w-8 bg-violet-500 shadow-[0_0_8px_rgba(124,58,237,0.6)]"
+                  : "w-4 bg-paper/40 group-hover:w-6 group-hover:bg-paper/70"
               }`}
             />
           </Link>

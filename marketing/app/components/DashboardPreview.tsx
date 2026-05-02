@@ -1,61 +1,200 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { CheckCheck, CheckCircle, Inbox, TrendingUp, Users, X } from "lucide-react";
+
+type Recommendation = "strong_yes" | "yes" | "maybe" | "no";
+
+interface DashCandidate {
+  name: string;
+  role: string;
+  score: number | null;
+  rec: Recommendation;
+  employer: string;
+  date: string;
+  summary: string;
+  strengths: string[];
+  concern: string | null;
+  engagement: number | null;
+  professional: number | null;
+  gradient: string;
+}
+
+const CANDIDATES: DashCandidate[] = [
+  {
+    name: "Sandra Mills",
+    role: "Finance & Insurance Manager",
+    score: 94,
+    rec: "strong_yes",
+    employer: "AutoNation Toyota",
+    date: "Mar 24",
+    summary:
+      "Twelve years of F&I experience at top national dealer groups with consistent 135–150% per-copy performance. Fully licensed in FL, JM&A and Zurich certified, deep CFPB compliance discipline. Strong leader who has trained finance office staff at two prior stores.",
+    strengths: [
+      "12y F&I at AutoNation + Hendrick",
+      "135–150% per-copy objective",
+      "JM&A + Zurich + AFIP certified",
+    ],
+    concern: "Currently $8K above mid-range comp band",
+    engagement: 95,
+    professional: 97,
+    gradient: "from-fuchsia-500 to-purple-500",
+  },
+  {
+    name: "Rachel Thompson",
+    role: "Service Advisor",
+    score: 91,
+    rec: "strong_yes",
+    employer: "Coggin Ford",
+    date: "Mar 23",
+    summary:
+      "Six years of high-volume service advisor experience at OEM franchise store. ASE C1 certified, Reynolds & Reynolds and CDK fluent. RO upsell averages $445 vs ~$350 industry benchmark. Available opening shift and Saturdays.",
+    strengths: [
+      "6y high-volume service advisor",
+      "$445 avg RO upsell vs ~$350 benchmark",
+      "ASE C1 · R&R + CDK fluent",
+    ],
+    concern: "Notice period: 2 weeks at current employer",
+    engagement: 92,
+    professional: 94,
+    gradient: "from-emerald-500 to-teal-500",
+  },
+  {
+    name: "Marcus Williams",
+    role: "Sales Consultant",
+    score: 87,
+    rec: "strong_yes",
+    employer: "Group 1 Honda",
+    date: "Mar 23",
+    summary:
+      "Eight years of automotive retail sales at AutoNation Chevrolet and Group 1 Honda. Documented 23% close rate on floor traffic. Relationship-based selling philosophy aligns with Prestige customer satisfaction culture.",
+    strengths: [
+      "8y automotive retail at major dealer groups",
+      "23% close rate on floor traffic",
+    ],
+    concern: "Voluntary departure from prior role — brief follow-up suggested",
+    engagement: 88,
+    professional: 91,
+    gradient: "from-violet-500 to-indigo-500",
+  },
+  {
+    name: "Kevin Park",
+    role: "F&I Manager",
+    score: 79,
+    rec: "yes",
+    employer: "Autonation Nissan",
+    date: "Mar 22",
+    summary:
+      "Five years of F&I at a major dealer group franchise. Florida dealer license active. Zurich certified, solid compliance awareness. Good availability including weekends.",
+    strengths: ["5y F&I at major dealer group", "FL dealer license + Zurich certified"],
+    concern: "Less per-copy data than top F&I candidate",
+    engagement: 79,
+    professional: 83,
+    gradient: "from-blue-500 to-cyan-500",
+  },
+  {
+    name: "Tyler Johnson",
+    role: "Parts Counter Specialist",
+    score: 76,
+    rec: "yes",
+    employer: "O'Reilly Auto Parts",
+    date: "Mar 22",
+    summary:
+      "Four years of parts counter and inventory management. Familiar with DMS lookup tools and OEM vs. aftermarket trade-offs. Full availability including evenings and weekends.",
+    strengths: ["4y parts counter + inventory", "DMS lookup tools fluent"],
+    concern: "No dealer-side experience yet",
+    engagement: 76,
+    professional: 78,
+    gradient: "from-orange-500 to-amber-500",
+  },
+  {
+    name: "Brittany Chen",
+    role: "Sales Consultant",
+    score: 74,
+    rec: "yes",
+    employer: "Hendrick Honda",
+    date: "Mar 22",
+    summary:
+      "Three years of Honda sales experience. Strong Honda brand and import product knowledge. Coachable, growth-oriented attitude. Available full schedule including weekends.",
+    strengths: ["3y Honda dealership sales", "Strong import product knowledge"],
+    concern: "Lower close-rate data vs top sales candidate",
+    engagement: 74,
+    professional: 79,
+    gradient: "from-pink-500 to-rose-500",
+  },
+];
+
+const COMPACT_ROWS: { name: string; role: string; score: number | null; rec: Recommendation; employer: string }[] = [
+  { name: "Derek Okafor", role: "Service Advisor", score: 71, rec: "yes", employer: "Firestone Complete Auto Care" },
+  { name: "Ashley Rivera", role: "BDC Representative", score: 62, rec: "maybe", employer: "NextGear Capital" },
+  { name: "Jordan Martinez", role: "Sales Consultant", score: 58, rec: "maybe", employer: "Best Buy" },
+  { name: "Brandon Lopez", role: "Sales Consultant", score: null, rec: "no", employer: "—" },
+];
 
 export function DashboardPreview() {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.3, once: true });
+  const inView = useInView(ref, { amount: 0.2, once: true });
 
   return (
     <section
       id="product"
       ref={ref}
-      className="relative bg-paper text-ink py-24 md:py-36 px-6 md:px-10 border-t border-paper-2"
+      className="relative py-24 md:py-36 px-6 md:px-10 border-t border-paper-2 overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(180deg, #fafafa 0%, #f4f5f9 50%, #fafafa 100%)",
+      }}
     >
-      <div className="max-w-6xl mx-auto">
-        <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-ink/50 mb-6">
+      {/* Subtle violet wash to bridge to dashboard chrome */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.4]"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(124, 58, 237, 0.04) 0%, transparent 70%)",
+        }}
+        aria-hidden
+      />
+
+      <div className="relative max-w-6xl mx-auto">
+        <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-violet-700 mb-6">
           The product · 02
         </div>
 
-        <div className="grid md:grid-cols-12 gap-10 items-end">
+        <div className="grid md:grid-cols-12 gap-8 md:gap-10 items-end">
           <div className="md:col-span-7">
-            <h2 className="font-sans font-semibold tracking-[-0.02em] text-[clamp(2rem,5vw,4.25rem)] leading-[1.02] max-w-[20ch]">
-              What lands on your desk:{" "}
-              <span className="font-serif italic font-normal">
-                every candidate, scored.
-              </span>
+            <h2 className="font-sans font-semibold tracking-[-0.02em] text-[clamp(2rem,5vw,4.25rem)] leading-[1.02] max-w-[20ch] text-ink">
+              Your morning queue,{" "}
+              <span className="font-serif italic font-normal text-violet-700">already ranked.</span>
             </h2>
           </div>
           <div className="md:col-span-5">
             <p className="text-ink/65 text-[16px] md:text-[17px] leading-relaxed">
-              Jordan finishes the interview. Twelve seconds later, this card is in your dashboard. Score, summary, strengths, concerns, and a transcript you can scrub. The only thing left is your judgment call.
+              Every applicant interviewed, scored, and sorted by signal strength
+              before you open your laptop. This is the actual dashboard your
+              recruiters log into Tuesday morning.
             </p>
           </div>
         </div>
 
-        {/* The dashboard mockup */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-14 md:mt-20"
+          className="mt-12 md:mt-16"
         >
-          <DashboardWindow inView={inView} />
+          <DashboardWindow />
         </motion.div>
 
-        {/* Below dashboard: feature row */}
         <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10">
           {[
-            ["Live scoring", "Each answer scored against your rubric in real time."],
-            ["Structured summary", "Every interview, the same fields. No fishing through transcripts."],
-            ["EEOC-compliant", "Disclosure, consent, protected-class guardrails baked in."],
-            ["One click to schedule", "Approved candidates land on the right recruiter's calendar."],
+            ["Ranked queue", "Sorted by composite score the moment each interview ends."],
+            ["Structured summary", "Same fields every time. No fishing through transcripts."],
+            ["Strengths + concerns", "Pulled directly from the conversation, not boilerplate."],
+            ["One-click shortlist", "Approved candidates land on the right recruiter's calendar."],
           ].map(([title, body]) => (
-            <div key={title} className="border-l-2 border-accent pl-4">
-              <div className="font-sans font-semibold text-[15px] text-ink">
-                {title}
-              </div>
+            <div key={title} className="border-l-2 border-violet-500 pl-4">
+              <div className="font-sans font-semibold text-[15px] text-ink">{title}</div>
               <p className="mt-2 text-[13px] text-ink/65 leading-relaxed">{body}</p>
             </div>
           ))}
@@ -65,137 +204,80 @@ export function DashboardPreview() {
   );
 }
 
-function DashboardWindow({ inView }: { inView: boolean }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const ringFill = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
-
+function DashboardWindow() {
   return (
-    <div
-      ref={ref}
-      className="bg-ink rounded-2xl border border-line shadow-[0_30px_80px_-20px_rgba(0,0,0,0.4)] overflow-hidden"
-    >
-      {/* Window chrome */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-line bg-ink-2">
-        <span className="w-2.5 h-2.5 rounded-full bg-paper/15" />
-        <span className="w-2.5 h-2.5 rounded-full bg-paper/15" />
-        <span className="w-2.5 h-2.5 rounded-full bg-paper/15" />
-        <div className="ml-3 text-[11px] font-mono text-paper/40">
-          dashboard.hiringhand.io / candidates / maria-vega
-        </div>
-        <div className="ml-auto flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.15em] text-accent">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-          live
-        </div>
-      </div>
+    <div className="relative">
+      {/* Soft halo behind the dashboard frame */}
+      <div
+        className="absolute inset-0 -m-10 rounded-[40px] blur-3xl pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 50% 40%, rgba(124, 58, 237, 0.18) 0%, transparent 70%)",
+        }}
+        aria-hidden
+      />
 
-      {/* Body */}
-      <div className="grid lg:grid-cols-12 bg-ink text-paper">
-        {/* Left: candidate header + transcript */}
-        <div className="lg:col-span-8 p-6 md:p-8 border-r border-line/50">
-          <div className="flex items-start gap-5">
-            <div
-              className="w-16 h-16 rounded-full shrink-0"
-              style={{
-                background:
-                  "linear-gradient(135deg, #2a2d36 0%, #4a4d56 50%, #2a2d36 100%)",
-              }}
-            />
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-3 flex-wrap">
-                <h3 className="font-sans font-semibold text-2xl">Maria Vega</h3>
-                <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-accent border border-accent/40 px-2 py-0.5 rounded-full">
-                  Strong signal
-                </span>
-              </div>
-              <div className="mt-1 text-[13px] font-mono text-paper/55 uppercase tracking-[0.1em]">
-                Banquet Server · Anchor Hospitality · Interview 14m 22s
-              </div>
-              <div className="mt-3 text-[14px] text-paper/75 italic font-serif">
-                &ldquo;Calm under pressure, hospitality-fluent, available evenings.
-                Recommend scheduling.&rdquo;
-              </div>
-            </div>
+      <div
+        className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-[0_50px_100px_-30px_rgba(0,0,0,0.25)]"
+        style={{ background: "var(--color-slate-bg)" }}
+      >
+        {/* Browser chrome */}
+        <div className="flex items-center gap-2 px-4 py-2.5 border-b border-slate-200 bg-slate-100">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#e85a4f]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#e8b94f]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#5fa757]" />
+          <div className="ml-3 text-[11px] font-mono text-slate-500 truncate">
+            dashboard.hiringhand.io · Prestige Auto Group
           </div>
+        </div>
 
-          {/* Strengths / Concerns chips */}
-          <div className="mt-7 grid sm:grid-cols-2 gap-6">
-            <ChipGroup
-              label="Strengths"
-              items={[
-                "4y banquet experience",
-                "ServSafe certified",
-                "Available evenings + weekends",
-                "Bilingual EN/ES",
-              ]}
-              tone="positive"
-            />
-            <ChipGroup
-              label="Concerns"
-              items={["No driver's license", "Notice period: 2 wks"]}
-              tone="warn"
-            />
-          </div>
+        {/* Violet gradient banner — exact match to the real dashboard */}
+        <div className="relative overflow-hidden bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 px-5 md:px-8 py-6">
+          <div className="pointer-events-none absolute -top-12 -right-12 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-8 left-1/4 h-40 w-40 rounded-full bg-indigo-300/20 blur-2xl" />
+          <div className="pointer-events-none absolute top-4 right-1/3 h-24 w-24 rounded-full bg-fuchsia-400/10 blur-2xl" />
 
-          {/* Transcript scrub */}
-          <div className="mt-7">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-[11px] font-mono uppercase tracking-[0.15em] text-paper/55">
-                Transcript · jump to moment
-              </div>
-              <div className="text-[10px] font-mono text-paper/40">14:22 total</div>
+          <div className="relative flex items-end justify-between gap-6 flex-wrap">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-violet-200 mb-1.5">
+                Review Queue
+              </p>
+              <h3 className="text-[24px] md:text-[30px] font-bold text-white tracking-tight leading-tight">
+                Pending Review
+              </h3>
+              <p className="mt-1.5 text-[13px] text-violet-200 max-w-md">
+                AI-screened candidates ranked by fit score — shortlist the ones worth your time.
+              </p>
             </div>
-            <div className="space-y-2 font-mono text-[12px]">
-              <TranscriptRow time="00:42" who="Jordan" text="Walk me through your last banquet shift." />
-              <TranscriptRow
-                time="02:11"
-                who="Maria"
-                text="We had a 200-person rehearsal dinner that turned into 240. I…"
-                highlight
-              />
-              <TranscriptRow time="05:33" who="Jordan" text="What's the longest shift you've held?" />
-              <TranscriptRow time="07:01" who="Maria" text="Twelve hours, opening to close. I'm comfortable on my feet." />
-              <TranscriptRow time="10:14" who="Jordan" text="Are you authorized to work in the US?" />
-              <TranscriptRow time="10:16" who="Maria" text="Yes." />
+
+            <div className="flex gap-2 flex-wrap">
+              <BannerStat icon={<Inbox className="h-4 w-4 text-violet-200 shrink-0" />} value="22" label="To Review" />
+              <BannerStat icon={<TrendingUp className="h-4 w-4 text-violet-200 shrink-0" />} value="78" label="Avg Score" />
+              <BannerStat icon={<Users className="h-4 w-4 text-violet-200 shrink-0" />} value="6" label="Recommended" />
             </div>
           </div>
         </div>
 
-        {/* Right: score ring + decision */}
-        <div className="lg:col-span-4 p-6 md:p-8 flex flex-col gap-6 bg-ink-2">
-          <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-paper/55">
-            Composite score
-          </div>
+        {/* Cards list */}
+        <div className="px-4 md:px-6 py-5 space-y-3">
+          {CANDIDATES.map((c) => (
+            <ReviewCard key={c.name} candidate={c} />
+          ))}
 
-          <div className="flex items-center justify-center py-2">
-            <ScoreRing value={8.4} max={10} progress={ringFill} />
-          </div>
-
-          {/* Sub-scores */}
-          <div className="space-y-3">
-            <SubScore label="Communication" value={9.0} />
-            <SubScore label="Relevant experience" value={8.7} />
-            <SubScore label="Reliability signal" value={8.1} />
-            <SubScore label="Job fit (rubric)" value={7.8} />
-          </div>
-
-          {/* Decision buttons */}
-          <div className="mt-auto pt-4 border-t border-line/50 flex flex-col gap-2">
-            <button className="w-full px-4 py-3 bg-accent hover:bg-accent-2 text-ink rounded-md text-[13px] font-medium transition flex items-center justify-between">
-              <span>Schedule with Lisa</span>
-              <span>→</span>
-            </button>
-            <div className="grid grid-cols-2 gap-2">
-              <button className="px-4 py-2.5 border border-line hover:border-paper/40 text-paper/80 rounded-md text-[12px] font-mono uppercase tracking-[0.1em] transition">
-                Hold
-              </button>
-              <button className="px-4 py-2.5 text-paper/40 hover:text-paper/70 rounded-md text-[12px] font-mono uppercase tracking-[0.1em] transition">
-                Pass
-              </button>
+          {/* Compact rows — lower scores */}
+          <div className="pt-2 mt-2 border-t border-slate-200/80">
+            <div className="text-[10px] font-mono uppercase tracking-[0.18em] text-slate-400 px-2 mb-2">
+              Lower priority — quick review
             </div>
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden divide-y divide-slate-100 shadow-sm">
+              {COMPACT_ROWS.map((r) => (
+                <CompactRow key={r.name} row={r} />
+              ))}
+            </div>
+          </div>
+
+          <div className="text-center text-[11px] font-mono text-slate-400 pt-3">
+            + 12 more candidates ranked
           </div>
         </div>
       </div>
@@ -203,126 +285,189 @@ function DashboardWindow({ inView }: { inView: boolean }) {
   );
 }
 
-function ChipGroup({
-  label,
-  items,
-  tone,
-}: {
-  label: string;
-  items: string[];
-  tone: "positive" | "warn";
-}) {
-  const dotClass = tone === "positive" ? "bg-accent" : "bg-paper/40";
-  return (
-    <div>
-      <div className="text-[11px] font-mono uppercase tracking-[0.15em] text-paper/55 mb-3">
-        {label}
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {items.map((it) => (
-          <span
-            key={it}
-            className="inline-flex items-center gap-2 bg-ink-3 border border-line/70 rounded-full px-3 py-1 text-[12px] text-paper/85"
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${dotClass}`} />
-            {it}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function TranscriptRow({
-  time,
-  who,
-  text,
-  highlight,
-}: {
-  time: string;
-  who: string;
-  text: string;
-  highlight?: boolean;
-}) {
-  return (
-    <div
-      className={`flex gap-3 px-3 py-1.5 rounded-md ${
-        highlight ? "bg-accent/10 border border-accent/30" : "hover:bg-ink-2"
-      } transition cursor-pointer`}
-    >
-      <span className="tabular-nums text-paper/40 shrink-0">{time}</span>
-      <span className={`shrink-0 ${who === "Jordan" ? "text-accent" : "text-paper/70"}`}>
-        {who}:
-      </span>
-      <span className="text-paper/80 truncate">{text}</span>
-    </div>
-  );
-}
-
-function SubScore({ label, value }: { label: string; value: number }) {
-  const pct = (value / 10) * 100;
-  return (
-    <div>
-      <div className="flex items-baseline justify-between mb-1.5">
-        <span className="text-[12px] text-paper/70">{label}</span>
-        <span className="font-sans font-semibold text-[14px] text-paper tabular-nums">
-          {value.toFixed(1)}
-        </span>
-      </div>
-      <div className="h-1 bg-line rounded-full overflow-hidden">
-        <div
-          className="h-full bg-accent"
-          style={{ width: `${pct}%`, transition: "width 1.2s ease-out" }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function ScoreRing({
+function BannerStat({
+  icon,
   value,
-  max,
-  progress,
+  label,
 }: {
-  value: number;
-  max: number;
-  progress: ReturnType<typeof useTransform<number, number>>;
+  icon: React.ReactNode;
+  value: string;
+  label: string;
 }) {
-  const r = 72;
-  const c = 2 * Math.PI * r;
-  const target = (value / max) * c;
-  const dashOffset = useTransform(progress, [0, 1], [c, c - target]);
+  return (
+    <div className="flex items-center gap-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5">
+      {icon}
+      <div>
+        <p className="text-[20px] font-bold text-white leading-none tabular-nums">{value}</p>
+        <p className="text-[10px] text-violet-200 mt-0.5 uppercase tracking-wider">{label}</p>
+      </div>
+    </div>
+  );
+}
+
+function ReviewCard({ candidate }: { candidate: DashCandidate }) {
+  const initials = candidate.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  const accent = scoreAccent(candidate.score);
 
   return (
-    <div className="relative w-44 h-44">
-      <svg viewBox="0 0 180 180" className="w-full h-full -rotate-90">
-        <circle
-          cx="90"
-          cy="90"
-          r={r}
-          fill="none"
-          stroke="var(--color-line)"
-          strokeWidth="6"
-        />
-        <motion.circle
-          cx="90"
-          cy="90"
-          r={r}
-          fill="none"
-          stroke="var(--color-accent)"
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeDasharray={c}
-          style={{ strokeDashoffset: dashOffset }}
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="font-sans font-semibold text-5xl tabular-nums text-paper">
-          {value.toFixed(1)}
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md hover:border-violet-300/50 transition-all">
+      <div className={`h-1 w-full ${accent.bar}`} />
+
+      <div className="p-4 md:p-5">
+        <div className="flex gap-4">
+          {/* Avatar + score column */}
+          <div className="flex flex-col items-center gap-1.5 shrink-0 w-12">
+            <div
+              className={`h-11 w-11 rounded-full bg-gradient-to-br ${candidate.gradient} flex items-center justify-center text-[13px] font-bold text-white`}
+            >
+              {initials}
+            </div>
+            {candidate.score !== null && (
+              <div className="text-center">
+                <div className={`text-[22px] font-bold leading-none ${accent.text}`}>
+                  {candidate.score}
+                </div>
+                <div className="text-[9px] text-slate-400 leading-tight">/100</div>
+              </div>
+            )}
+          </div>
+
+          {/* Main content */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h4 className="text-[15px] font-semibold text-slate-900 leading-tight">
+                    {candidate.name}
+                  </h4>
+                  <RecPill rec={candidate.rec} />
+                </div>
+                <div className="flex items-center gap-1.5 mt-1 text-[12px] text-slate-500 flex-wrap">
+                  <span>{candidate.role}</span>
+                  <span className="text-slate-300">·</span>
+                  <span>{candidate.date}</span>
+                  <span className="hidden sm:inline truncate">· {candidate.employer}</span>
+                </div>
+              </div>
+
+              <div className="hidden md:flex items-center gap-2 shrink-0">
+                <button
+                  className="h-8 w-8 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-rose-600 hover:border-rose-200 transition"
+                  type="button"
+                  aria-label="Archive"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+                <button
+                  className="flex items-center gap-1.5 text-[12px] font-semibold bg-violet-600 text-white rounded-lg px-3.5 py-2 shadow-sm hover:bg-violet-700 transition"
+                  type="button"
+                >
+                  <CheckCheck className="h-3.5 w-3.5" />
+                  Shortlist
+                </button>
+              </div>
+            </div>
+
+            <p className="mt-2.5 text-[13px] text-slate-700 leading-relaxed line-clamp-2">
+              {candidate.summary}
+            </p>
+
+            <div className="mt-2.5 flex flex-wrap gap-1.5">
+              {candidate.strengths.map((s, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-center gap-1 text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-2.5 py-0.5"
+                >
+                  <CheckCircle className="h-3 w-3 shrink-0" />
+                  <span className="truncate max-w-[200px]">{s}</span>
+                </span>
+              ))}
+              {candidate.concern && (
+                <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-100 rounded-full px-2.5 py-0.5">
+                  <span className="truncate max-w-[200px]">{candidate.concern}</span>
+                </span>
+              )}
+            </div>
+
+            <div className="mt-3 flex gap-3 md:gap-5">
+              <MiniBar label="Engagement" value={candidate.engagement} />
+              <MiniBar label="Professional" value={candidate.professional} />
+              <MiniBar label="Fit" value={candidate.score} />
+            </div>
+          </div>
         </div>
-        <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-paper/40 mt-1">
-          / {max}
+      </div>
+    </div>
+  );
+}
+
+function CompactRow({
+  row,
+}: {
+  row: { name: string; role: string; score: number | null; rec: Recommendation; employer: string };
+}) {
+  const accent = scoreAccent(row.score);
+  return (
+    <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition">
+      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
+        {row.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <span className="text-[13px] font-medium text-slate-900 truncate">{row.name}</span>
+          <RecPill rec={row.rec} />
         </div>
+        <div className="text-[11px] text-slate-500 truncate">{row.role} · {row.employer}</div>
+      </div>
+      <div className="text-right shrink-0">
+        <div className={`text-[16px] font-bold leading-none ${accent.text}`}>
+          {row.score ?? "—"}
+        </div>
+        <div className="text-[9px] text-slate-400 mt-0.5">/100</div>
+      </div>
+    </div>
+  );
+}
+
+function scoreAccent(score: number | null) {
+  if (score === null) return { bar: "bg-slate-200", text: "text-slate-400" };
+  if (score >= 80) return { bar: "bg-emerald-500", text: "text-emerald-600" };
+  if (score >= 60) return { bar: "bg-amber-500", text: "text-amber-600" };
+  return { bar: "bg-red-500", text: "text-red-600" };
+}
+
+function RecPill({ rec }: { rec: Recommendation }) {
+  const map: Record<Recommendation, { label: string; cls: string }> = {
+    strong_yes: { label: "Strong Yes", cls: "bg-emerald-100 text-emerald-700" },
+    yes: { label: "Yes", cls: "bg-emerald-50 text-emerald-600" },
+    maybe: { label: "Maybe", cls: "bg-amber-100 text-amber-700" },
+    no: { label: "No", cls: "bg-red-100 text-red-700" },
+  };
+  const { label, cls } = map[rec];
+  return (
+    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${cls}`}>
+      {label}
+    </span>
+  );
+}
+
+function MiniBar({ label, value }: { label: string; value: number | null }) {
+  const pct = value !== null ? Math.min(100, Math.max(0, value)) : 0;
+  const color = pct >= 80 ? "bg-emerald-500" : pct >= 60 ? "bg-amber-400" : pct > 0 ? "bg-red-400" : "bg-slate-200";
+  return (
+    <div className="flex-1">
+      <div className="flex justify-between mb-0.5">
+        <span className="text-[10px] text-slate-500">{label}</span>
+        <span className="text-[10px] font-semibold text-slate-700 tabular-nums">{value ?? "—"}</span>
+      </div>
+      <div className="h-1 rounded-full bg-slate-200">
+        <div className={`h-1 rounded-full ${color}`} style={{ width: `${pct}%` }} />
       </div>
     </div>
   );

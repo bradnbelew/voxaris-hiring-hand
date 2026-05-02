@@ -10,7 +10,7 @@ export function CTASection() {
       <div className="absolute inset-0 beam pointer-events-none" aria-hidden />
 
       <div className="relative max-w-4xl mx-auto text-center">
-        <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-accent mb-8">
+        <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-violet-400 mb-8">
           Two ways to start · 09
         </div>
 
@@ -34,7 +34,7 @@ export function CTASection() {
           </Link>
           <Link
             href="mailto:hello@hiringhand.io?subject=Hiring%20Hand%20demo"
-            className="group inline-flex items-center gap-3 px-7 py-4 bg-accent hover:bg-accent-2 text-ink rounded-full text-[14px] font-medium transition"
+            className="group inline-flex items-center gap-3 px-7 py-4 bg-violet-600 hover:bg-violet-700 text-white rounded-full text-[14px] font-medium transition shadow-[0_15px_40px_-10px_rgba(124,58,237,0.55)]"
           >
             Book a 20-min demo
             <span className="text-lg group-hover:translate-x-0.5 transition-transform">→</span>
