@@ -18,7 +18,7 @@ const FAQS = [
   },
   {
     q: "What roles is this best for?",
-    a: "High-volume hourly and structured-skill roles: hospitality, healthcare support (CNA, HHA), light industrial, warehouse, retail, dispatch. Anywhere you have more applicants than recruiters and the screening criteria are well-defined. Less effective today for senior knowledge-work roles where unstructured judgment dominates.",
+    a: "Any role where you have more applicants than recruiter time and the screening criteria are well-defined. If you can write a rubric for what makes a good hire, Jordan can interview against it. We currently see strong fit across high-volume hourly and structured-skill roles. Less effective today for senior knowledge-work roles where unstructured judgment dominates.",
   },
   {
     q: "How does this integrate with our ATS?",

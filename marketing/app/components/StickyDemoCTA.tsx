@@ -35,11 +35,11 @@ export function StickyDemoCTA() {
         >
           <Link
             href="#demo"
-            className="group flex items-center gap-3 bg-accent hover:bg-accent-2 text-ink px-5 py-3 rounded-full text-[13px] font-medium shadow-[0_8px_30px_rgba(34,215,126,0.35)] transition-colors"
+            className="group flex items-center gap-3 bg-violet-600 hover:bg-violet-700 text-white px-5 py-3 rounded-full text-[13px] font-medium shadow-[0_8px_30px_rgba(124,58,237,0.45)] transition-colors"
           >
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-ink opacity-30" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-ink" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-40" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
             </span>
             Book a demo
             <span className="text-base group-hover:translate-x-0.5 transition-transform">→</span>

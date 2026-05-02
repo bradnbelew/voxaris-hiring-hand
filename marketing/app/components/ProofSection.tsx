@@ -3,32 +3,32 @@
 import { motion } from "motion/react";
 
 const LOG_LINES = [
-  { ok: true, time: "Mon 09:18", who: "Aisha P. · CSR", score: "9.2", routed: "strong-signal queue", strong: true },
-  { ok: true, time: "Mon 09:31", who: "Devon R. · CSR", score: "7.4", routed: "Lisa @ Northbay" },
+  { ok: true, time: "Mon 09:18", who: "Sandra Mills · F&I", score: "94", routed: "Lisa · strong-signal queue", strong: true },
+  { ok: true, time: "Mon 09:31", who: "Rachel Thompson · Service", score: "91", routed: "Lisa @ Prestige" },
   { warn: true, time: "Mon 09:42", note: "candidate paused — Jordan rephrased question" },
-  { ok: true, time: "Mon 10:07", who: "Jose D. · CSR", score: "8.0", routed: "Lisa @ Northbay" },
+  { ok: true, time: "Mon 10:07", who: "Marcus Williams · Sales", score: "87", routed: "Lisa @ Prestige" },
   { warn: true, time: "Mon 10:14", note: "Spanish-bilingual flag detected — added to recruiter notes" },
-  { ok: true, time: "Mon 11:02", who: "Tasha L. · CSR", score: "7.8", routed: "Lisa @ Northbay" },
-  { ok: true, time: "Mon 11:46", who: "Maria V. · CSR", score: "8.4", routed: "Lisa @ Northbay" },
+  { ok: true, time: "Mon 11:02", who: "Kevin Park · F&I", score: "79", routed: "review queue" },
+  { ok: true, time: "Mon 11:46", who: "Tyler Johnson · Parts", score: "76", routed: "review queue" },
 ];
 
 const USE_CASES = [
   {
     label: "Staffing agencies",
-    headline: "Replace a $60K recruiter without missing a shift fill.",
-    body: "Run 24/7 on hospitality, light industrial, and healthcare-support roles. Jordan does first-round, your recruiters close. You take more roles without adding headcount.",
+    headline: "Replace a $60K recruiter without missing a fill.",
+    body: "Jordan handles first-round screens at scale. Your recruiters close. You take more roles without adding headcount, regardless of the role type or volume.",
     metric: "3.2x roles per recruiter",
   },
   {
-    label: "Mid-market w/ high churn",
-    headline: "Fill the front line before they ghost you.",
-    body: "Hourly hospitality, retail, and warehouse teams lose candidates to whoever calls back first. Jordan calls back in 60 seconds, regardless of when the application landed.",
+    label: "High-churn frontline",
+    headline: "Reach candidates before competitors do.",
+    body: "When you operate at volume, candidates take whichever offer calls back first. Jordan replies in 60 seconds — every applicant, every channel, every shift, every weekend.",
     metric: "<60s to first contact",
   },
   {
     label: "Enterprise TA teams",
-    headline: "Give your recruiters back the only thing that matters.",
-    body: "Stop spending 60% of TA hours on first-round screens. Jordan handles the structured pre-screen, your team focuses on closing top-of-funnel candidates and final-round fit.",
+    headline: "Give recruiters back the only thing that matters.",
+    body: "Stop spending 60% of TA hours on first-round screens. Jordan handles the structured pre-screen for any role with a defined rubric. Your team focuses on closing top-of-funnel and final-round fit.",
     metric: "60% recruiter time recovered",
   },
 ];
@@ -49,7 +49,7 @@ export function ProofSection() {
           <span className="font-serif italic font-normal">One week.</span>
         </h2>
         <p className="mt-6 text-ink/65 max-w-xl text-[16px] leading-relaxed">
-          A typical week on a single Customer Service Rep posting at a mid-market client.
+          A typical week running across the open roles at a mid-market client.
           Numbers are illustrative — Jordan&apos;s actual throughput is bounded only by
           how fast applications come in.
         </p>
@@ -82,7 +82,7 @@ export function ProofSection() {
           className="mt-12 bg-ink text-paper rounded-xl p-6 font-mono text-[12px] leading-relaxed shadow-[0_30px_60px_-30px_rgba(0,0,0,0.4)]"
         >
           <div className="flex items-center justify-between mb-4 text-paper/45">
-            <span>$ cat hiringhand.run --role=csr --day=mon</span>
+            <span>$ cat hiringhand.run --org=prestige --day=mon</span>
             <span className="flex items-center gap-2 text-accent">
               <span className="w-1.5 h-1.5 rounded-full bg-accent" />
               sample run
@@ -117,7 +117,7 @@ export function ProofSection() {
             Built for · 05b
           </div>
           <h3 className="font-sans font-semibold tracking-[-0.02em] text-[clamp(1.6rem,3.5vw,2.75rem)] leading-tight max-w-[24ch]">
-            High-volume hiring is the same problem in three jobs.
+            High-volume hiring is the same problem in three shapes.
           </h3>
 
           <div className="mt-12 grid md:grid-cols-3 gap-6 lg:gap-8">

@@ -169,30 +169,35 @@ export function CandidateWall() {
 
       {/* === STATIC HERO HEADER === */}
       <div className="relative z-30 pt-24 md:pt-28 pb-4 px-6 md:px-10 text-center">
-        <div className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.22em] text-violet-400 mb-4">
+        <div className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.22em] text-violet-400 mb-5">
           <Sparkles className="w-3.5 h-3.5" strokeWidth={2} />
           AI Video Interviewer · Hiring Hand
         </div>
 
-        <h1 className="font-sans font-semibold tracking-[-0.02em] text-[clamp(2rem,5vw,4.25rem)] leading-[1.02] max-w-[22ch] mx-auto">
+        <h1 className="font-sans font-semibold tracking-[-0.025em] text-[clamp(2.25rem,5.6vw,5rem)] leading-[1.0] max-w-[22ch] mx-auto">
           Every applicant gets a real interview.{" "}
-          <span className="font-serif italic font-normal text-accent">
+          <span
+            className="font-serif italic font-normal text-accent inline-block"
+            style={{
+              textShadow:
+                "0 0 24px rgba(34, 215, 126, 0.45), 0 0 48px rgba(34, 215, 126, 0.18)",
+            }}
+          >
             Face to face.
           </span>
         </h1>
 
-        <p className="mt-5 text-paper/65 text-[15px] md:text-[17px] leading-relaxed max-w-xl mx-auto">
-          Jordan video-interviews all of them in parallel — structured,
-          EEOC-compliant, scored. Your shortlist is ranked and ready before
-          your team opens a laptop.
+        <p className="mt-6 text-paper/80 text-[16px] md:text-[19px] leading-snug max-w-[36ch] mx-auto">
+          All in parallel. Structured, scored, and{" "}
+          <span className="text-paper font-medium">ranked before 9 AM.</span>
         </p>
       </div>
 
-      {/* === PHASE CAPTION — anchored, no position drift between phases === */}
-      <div className="relative z-30 px-6 md:px-10 mt-2 mb-6">
-        <div className="max-w-3xl mx-auto text-center relative h-[112px] md:h-[124px]">
-          {/* Kicker — pinned to top */}
-          <div className="absolute top-0 inset-x-0 h-5 flex items-center justify-center">
+      {/* === PHASE CAPTION — anchored, larger and more prominent === */}
+      <div className="relative z-30 px-6 md:px-10 mt-3 mb-7">
+        <div className="max-w-4xl mx-auto text-center relative h-[140px] md:h-[156px]">
+          {/* Kicker — pinned to top, bigger and bolder */}
+          <div className="absolute top-0 inset-x-0 h-6 flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${phase}-kicker`}
@@ -200,31 +205,31 @@ export function CandidateWall() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.5 }}
-                className="text-[11px] font-mono uppercase tracking-[0.22em] text-violet-400 flex items-center justify-center gap-2"
+                className="text-[12px] md:text-[13px] font-mono uppercase tracking-[0.24em] text-violet-300 font-semibold flex items-center justify-center gap-2"
               >
-                <span className="inline-block w-6 h-px bg-violet-400/60" />
+                <span className="w-1.5 h-1.5 rounded-full bg-violet-400 shadow-[0_0_8px_rgba(124,58,237,0.7)]" />
                 {caption.kicker}
-                <span className="inline-block w-6 h-px bg-violet-400/60" />
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Line — pinned below kicker, content always grows downward from same Y */}
-          <div className="absolute top-9 inset-x-0 px-2 flex items-start justify-center">
+          {/* Line — bigger, more contrast, drop shadow for pop */}
+          <div className="absolute top-12 inset-x-0 px-2 flex items-start justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${phase}-line`}
-                initial={{ opacity: 0, y: 6 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.5 }}
-                className="font-sans font-medium text-[clamp(1.05rem,1.8vw,1.55rem)] text-paper leading-snug max-w-[52ch] mx-auto"
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.55 }}
+                className="font-sans font-semibold text-[clamp(1.3rem,2.4vw,2.1rem)] text-paper leading-[1.18] max-w-[44ch] mx-auto tracking-[-0.01em]"
+                style={{ textShadow: "0 1px 16px rgba(0,0,0,0.4)" }}
               >
                 {caption.line.split(/(\b50\b|\bSandra Mills\b|\b94\b|\b6\b|\bJordan\b|\bparallel\b|\bface-to-face\b|\bsame time\b)/g).map((part, i) =>
                   ["50", "Sandra Mills", "94", "6"].includes(part) ? (
-                    <span key={i} className="text-accent font-semibold">{part}</span>
+                    <span key={i} className="text-accent font-bold">{part}</span>
                   ) : ["Jordan", "parallel", "face-to-face", "same time"].includes(part) ? (
-                    <span key={i} className="text-violet-400 font-semibold">{part}</span>
+                    <span key={i} className="text-violet-300 font-bold">{part}</span>
                   ) : (
                     <span key={i}>{part}</span>
                   )
@@ -252,7 +257,7 @@ export function CandidateWall() {
         </div>
       </div>
 
-      {/* === BIG STAT NUMBERS — below the grid === */}
+      {/* === BIG STAT NUMBERS — middle stat dominates === */}
       <div className="relative z-30 px-6 md:px-10 mt-8 mb-6">
         <div className="max-w-4xl mx-auto grid grid-cols-3 gap-4 md:gap-8 items-end">
           <BigStat
@@ -260,12 +265,14 @@ export function CandidateWall() {
             value="50"
             sub="across 5 open roles"
             tone="paper"
+            size="small"
           />
           <BigStat
             label="Your team's time"
             value="0:00"
             sub="hrs spent screening"
             tone="accent"
+            size="hero"
             pulse
           />
           <BigStat
@@ -273,6 +280,7 @@ export function CandidateWall() {
             value={phaseIdx >= 2 ? "94" : "—"}
             sub={phaseIdx >= 2 ? "Sandra Mills · F&I" : "scoring in progress"}
             tone="violet"
+            size="small"
           />
         </div>
       </div>
@@ -283,7 +291,7 @@ export function CandidateWall() {
           <div className="flex flex-col sm:flex-row items-center gap-3">
             <Link
               href="/talk"
-              className="group inline-flex items-center gap-3 px-7 py-3.5 bg-violet-600 hover:bg-violet-700 text-white rounded-full text-[14px] font-medium transition shadow-[0_15px_40px_-10px_rgba(124,58,237,0.55)]"
+              className="group inline-flex items-center gap-3 px-8 md:px-9 py-4 bg-violet-600 hover:bg-violet-700 text-white rounded-full text-[15px] md:text-[16px] font-semibold transition shadow-[0_20px_50px_-12px_rgba(124,58,237,0.65)]"
             >
               See a sample interview
               <span className="text-lg group-hover:translate-x-0.5 transition-transform">→</span>
@@ -569,14 +577,17 @@ function BigStat({
   value,
   sub,
   tone,
+  size = "small",
   pulse,
 }: {
   label: string;
   value: string;
   sub?: string;
   tone: "paper" | "accent" | "violet";
+  size?: "small" | "hero";
   pulse?: boolean;
 }) {
+  const isHero = size === "hero";
   const valueColor =
     tone === "accent"
       ? "text-accent"
@@ -585,19 +596,50 @@ function BigStat({
         : "text-paper";
 
   return (
-    <div className="text-center flex flex-col items-center">
-      <div className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.18em] md:tracking-[0.22em] text-paper/45 mb-1.5 md:mb-2 flex items-center gap-1.5 justify-center">
-        {pulse && <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-accent animate-pulse" />}
+    <div
+      className={`relative text-center flex flex-col items-center ${
+        isHero ? "px-2 md:px-4 py-3 md:py-4 rounded-2xl bg-accent/[0.025] ring-1 ring-accent/15" : ""
+      }`}
+      style={
+        isHero
+          ? {
+              boxShadow:
+                "0 20px 50px -22px rgba(34, 215, 126, 0.14)",
+            }
+          : undefined
+      }
+    >
+      <div
+        className={`font-mono uppercase mb-1.5 md:mb-2 flex items-center gap-1.5 justify-center truncate ${
+          isHero
+            ? "text-[10px] md:text-[12px] tracking-[0.22em] text-accent/75"
+            : "text-[9px] md:text-[10px] tracking-[0.18em] md:tracking-[0.22em] text-paper/40"
+        }`}
+      >
+        {pulse && <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />}
         <span className="truncate">{label}</span>
       </div>
       <div
         className={`font-sans font-bold tabular-nums leading-none ${valueColor}`}
-        style={{ fontSize: "clamp(1.8rem, 6vw, 5rem)" }}
+        style={{
+          fontSize: isHero
+            ? "clamp(2.5rem, 8vw, 6.5rem)"
+            : "clamp(1.5rem, 4.5vw, 3.25rem)",
+          textShadow: isHero
+            ? "0 0 14px rgba(34, 215, 126, 0.18)"
+            : undefined,
+        }}
       >
         {value}
       </div>
       {sub && (
-        <div className="mt-1.5 md:mt-2 text-[9px] md:text-[11px] font-mono uppercase tracking-[0.15em] md:tracking-[0.18em] text-paper/40 truncate">
+        <div
+          className={`mt-1.5 md:mt-2 font-mono uppercase tracking-[0.15em] truncate ${
+            isHero
+              ? "text-[10px] md:text-[12px] text-accent/65"
+              : "text-[8px] md:text-[10px] text-paper/35"
+          }`}
+        >
           {sub}
         </div>
       )}
