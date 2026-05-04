@@ -1,107 +1,206 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Header } from "../components/Header";
-import { Footer } from "../components/Footer";
 
 export const metadata: Metadata = {
   title: "Talk to Jordan — Hiring Hand",
   description:
-    "Sit on the candidate side. Take a 60-second sample interview with Jordan, our AI hiring agent.",
+    "Sit on the candidate side. Take a 60-second sample interview with Jordan, your hiring agent.",
 };
 
 export default function TalkPage() {
   return (
-    <main className="min-h-screen flex flex-col bg-ink text-paper grain">
-      <Header />
+    <div className="talk-page">
+      <header className="doc-head" style={{ borderBottomColor: "rgba(239,231,214,.18)" }}>
+        <Link href="/" className="doc-wm" style={{ color: "var(--text)" }}>
+          <span className="dot" />
+          Hiring Hand
+        </Link>
+        <Link href="/" className="doc-back" style={{ color: "rgba(239,231,214,.65)" }}>
+          ← Back to home
+        </Link>
+      </header>
 
-      <section className="flex-1 flex items-center justify-center px-6 md:px-10 pt-24 pb-16">
-        <div className="max-w-3xl w-full">
-          <div className="flex items-center gap-3 text-[11px] font-mono uppercase tracking-[0.2em] text-accent">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+      <main className="talk-main">
+        <div className="talk-inner">
+          <div className="talk-stamp">
+            <span className="swatch" />
             Sandbox · live in 60 seconds
           </div>
 
-          <h1 className="mt-6 font-sans font-semibold tracking-[-0.02em] text-[clamp(2.25rem,6vw,5rem)] leading-[0.95]">
-            Sit on the{" "}
-            <span className="font-serif italic font-normal text-accent">candidate</span>{" "}
-            side.
+          <h1 className="talk-h1">
+            Sit on the <span className="talk-h1-accent">candidate</span> side.
           </h1>
 
-          <p className="mt-6 text-paper/65 text-[16px] md:text-[17px] leading-relaxed max-w-xl">
-            You&apos;re about to be interviewed by Jordan for a sample role. The session is short — about 60 to 90 seconds — and the goal is just to feel what your applicants will feel. Nothing is recorded; no scoring lands anywhere; you can stop at any time.
+          <p className="talk-lede">
+            You&apos;re about to be interviewed by Jordan for a sample role. The session is short
+            &mdash; about 60 to 90 seconds &mdash; and the goal is just to feel what your applicants
+            will feel. Nothing is recorded; no scoring lands anywhere; you can stop at any time.
           </p>
 
-          <div className="mt-10 bg-ink-2 border border-line/60 rounded-2xl p-6 md:p-8">
-            <div className="flex items-center justify-between mb-6">
-              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-paper/40">
-                Pre-flight check
-              </div>
-              <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-paper/40">
-                v0.1 · sandbox
-              </div>
+          <div className="talk-card">
+            <div className="talk-card-head">
+              <span>Pre-flight check</span>
+              <span>v0.1 · sandbox</span>
             </div>
 
-            <ul className="space-y-3 text-[14px] text-paper/80">
-              <li className="flex items-start gap-3">
-                <span className="text-accent mt-0.5">●</span>
-                <span>You&apos;ll need camera + microphone access for ~90 seconds.</span>
+            <ul className="talk-list">
+              <li>You&apos;ll need camera + microphone access for ~90 seconds.</li>
+              <li>
+                Use a quiet room and a real device (this doesn&apos;t work great in a noisy coffee
+                shop).
               </li>
-              <li className="flex items-start gap-3">
-                <span className="text-accent mt-0.5">●</span>
-                <span>Use a quiet room and a real device (this doesn&apos;t work great in a noisy coffee shop).</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-accent mt-0.5">●</span>
-                <span>Jordan will open with an AI disclosure and ask for your consent. That&apos;s required by law and isn&apos;t a bug.</span>
+              <li>
+                Jordan will open with an AI disclosure and ask for your consent. That&apos;s
+                required by law and isn&apos;t a bug.
               </li>
             </ul>
 
-            <div className="mt-8 pt-6 border-t border-line/40">
-              <div className="text-[12px] font-mono uppercase tracking-[0.15em] text-paper/55 mb-3">
-                Sandbox status
+            <div className="talk-status">
+              <div className="talk-status-row">
+                <span className="talk-status-label">Sandbox status</span>
+                <span className="talk-status-tag">in progress</span>
               </div>
-              <div className="flex items-baseline gap-3">
-                <span className="text-paper/85 text-[15px]">
-                  Wiring up the live interview persona
-                </span>
-                <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-paper/40">
-                  in progress
-                </span>
-              </div>
-              <p className="mt-3 text-[13px] text-paper/55 leading-relaxed">
-                We&apos;re finishing the marketing-sandbox interview persona. In the meantime, the fastest way to see Jordan in action is a live demo over Zoom — we&apos;ll spin up a real interview against your roles.
+              <div className="talk-status-line">Wiring up the live interview persona</div>
+              <p className="talk-status-p">
+                We&apos;re finishing the marketing-sandbox interview persona. In the meantime, the
+                fastest way to see Jordan in action is a live walkthrough &mdash; we&apos;ll spin up
+                a real interview against your roles.
               </p>
 
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                <Link
+              <div className="talk-actions">
+                <a
                   href="mailto:hello@hiringhand.io?subject=Live%20Jordan%20demo&body=I'd%20like%20to%20see%20Jordan%20interview%20a%20candidate%20for%20one%20of%20our%20roles.%20Best%20times%20this%20week%3A"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-accent hover:bg-accent-2 text-ink rounded-full text-[13px] font-medium transition"
+                  className="cta"
                 >
                   Get a live walkthrough
-                  <span>→</span>
-                </Link>
-                <Link
+                  <span className="arrow" />
+                </a>
+                <a
                   href="mailto:hello@hiringhand.io?subject=Notify%20me%20when%20sandbox%20is%20live"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 border border-line hover:border-paper/40 text-paper/85 rounded-full text-[13px] font-medium transition"
+                  className="talk-link-secondary"
                 >
                   Notify me when sandbox is live
-                </Link>
+                </a>
               </div>
             </div>
           </div>
-
-          <div className="mt-10 text-center">
-            <Link
-              href="/"
-              className="text-[12px] font-mono uppercase tracking-[0.2em] text-paper/45 hover:text-paper/80 transition"
-            >
-              ← Back to home
-            </Link>
-          </div>
         </div>
-      </section>
+      </main>
 
-      <Footer />
-    </main>
+      <style>{`
+        .talk-page{
+          min-height: 100vh;
+          background: linear-gradient(to bottom, #050714 0%, #0a0e22 100%);
+          color: var(--text);
+          display: flex; flex-direction: column;
+        }
+        .talk-main{
+          flex: 1;
+          display: flex; align-items: center; justify-content: center;
+          padding: 80px 32px 60px;
+        }
+        .talk-inner{
+          max-width: 720px; width: 100%;
+        }
+        .talk-stamp{
+          display: inline-flex; align-items: center; gap: 14px;
+          font-family: var(--f-mono); font-size: 11px; letter-spacing: .25em;
+          text-transform: uppercase;
+          color: var(--text-soft);
+          margin-bottom: 28px;
+        }
+        .talk-stamp .swatch{
+          width: 8px; height: 8px; border-radius: 50%;
+          background: var(--phosphor); box-shadow: 0 0 12px var(--phosphor);
+          animation: pulse-dot 1.6s ease-in-out infinite;
+        }
+        .talk-h1{
+          font-family: var(--f-display); font-variation-settings: "opsz" 144;
+          font-weight: 400;
+          font-size: clamp(40px, 6.4vw, 84px);
+          line-height: 0.96;
+          letter-spacing: -0.03em;
+          margin: 0 0 28px;
+          color: var(--text);
+        }
+        .talk-h1-accent{ color: var(--amber); font-weight: 500; }
+        .talk-lede{
+          font-size: clamp(16px, 1.4vw, 18px);
+          line-height: 1.55;
+          color: var(--text-soft);
+          max-width: 56ch;
+          margin: 0 0 40px;
+        }
+        .talk-card{
+          background: rgba(255,255,255,0.03);
+          border: 1px solid var(--rule);
+          border-radius: 4px;
+          padding: 28px 30px 32px;
+          backdrop-filter: blur(4px);
+        }
+        .talk-card-head{
+          display: flex; justify-content: space-between;
+          font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .2em;
+          text-transform: uppercase; color: var(--text-mute);
+          margin-bottom: 22px;
+        }
+        .talk-list{
+          list-style: none; padding: 0; margin: 0 0 28px;
+        }
+        .talk-list li{
+          position: relative; padding-left: 22px; margin-bottom: 10px;
+          font-size: 15px; line-height: 1.55;
+          color: var(--text);
+        }
+        .talk-list li::before{
+          content: "·";
+          position: absolute; left: 4px; top: -3px;
+          color: var(--phosphor);
+          font-size: 26px; font-weight: 700; line-height: 1;
+        }
+        .talk-status{
+          padding-top: 24px;
+          border-top: 1px solid var(--rule);
+        }
+        .talk-status-row{
+          display: flex; align-items: baseline; justify-content: space-between;
+          margin-bottom: 8px;
+        }
+        .talk-status-label{
+          font-family: var(--f-mono); font-size: 11px; letter-spacing: .22em;
+          text-transform: uppercase; color: var(--text-soft); font-weight: 500;
+        }
+        .talk-status-tag{
+          font-family: var(--f-mono); font-size: 10px; letter-spacing: .18em;
+          text-transform: uppercase; color: var(--text-mute);
+        }
+        .talk-status-line{
+          font-family: var(--f-display); font-variation-settings: "opsz" 36;
+          font-size: 17px; color: var(--text);
+          margin-bottom: 10px;
+        }
+        .talk-status-p{
+          font-size: 14px; line-height: 1.55;
+          color: var(--text-soft);
+          margin: 0 0 22px;
+          max-width: 56ch;
+        }
+        .talk-actions{
+          display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+        }
+        .talk-link-secondary{
+          font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .14em;
+          text-transform: uppercase; color: var(--text-soft);
+          text-decoration: underline;
+          text-underline-offset: 5px;
+          text-decoration-color: var(--rule);
+          transition: color .2s, text-decoration-color .2s;
+        }
+        .talk-link-secondary:hover{
+          color: var(--text);
+          text-decoration-color: var(--text);
+        }
+      `}</style>
+    </div>
   );
 }

@@ -1,27 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { DM_Sans, JetBrains_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
+const dmSans = DM_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const jetBrains = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
 });
 
-const instrumentSerif = Instrument_Serif({
+const newsreader = Newsreader({
   variable: "--font-serif",
   subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const TITLE = "Hiring Hand — Every applicant. Interviewed. Scored.";
+const TITLE = "Hiring Hand — By dawn, your shortlist is on your desk.";
 const DESCRIPTION =
-  "Jordan is an AI video hiring agent. Every applicant gets a structured, EEOC-compliant pre-screen in 14 minutes — recruiters wake up to a ranked, scored shortlist on their dashboard.";
+  "Jordan handles every first-round interview on video — structured, EEOC-aligned, scored against your rubric. By morning the shortlist (and the tape) is on your desk.";
 const SITE_URL = "https://hiringhand.io";
 
 export const metadata: Metadata = {
@@ -35,8 +34,8 @@ export const metadata: Metadata = {
   authors: [{ name: "Voxaris LLC", url: "https://voxaris.io" }],
   generator: "Next.js",
   keywords: [
-    "AI hiring agent",
-    "AI video interview",
+    "hiring agent",
+    "video interview",
     "candidate pre-screening",
     "AI recruiter",
     "staffing automation",
@@ -46,9 +45,7 @@ export const metadata: Metadata = {
     "automotive dealership hiring",
   ],
   category: "business",
-  alternates: {
-    canonical: SITE_URL,
-  },
+  alternates: { canonical: SITE_URL },
   openGraph: {
     type: "website",
     siteName: "Hiring Hand",
@@ -61,7 +58,7 @@ export const metadata: Metadata = {
         url: "/og",
         width: 1200,
         height: 630,
-        alt: "Hiring Hand — every applicant interviewed and scored",
+        alt: "Hiring Hand — every applicant interviewed and scored by morning",
       },
     ],
   },
@@ -91,7 +88,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0b",
+  themeColor: "#050714",
   width: "device-width",
   initialScale: 1,
 };
@@ -102,10 +99,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${jetBrains.variable} ${newsreader.variable} h-full antialiased`}
     >
       <head>
-        {/* JSON-LD structured data — Organization + WebSite */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -135,24 +131,16 @@ export default function RootLayout({
                 "@type": "Product",
                 name: "Hiring Hand",
                 description:
-                  "An AI video interviewer that screens every applicant — structured, EEOC-compliant, scored — and delivers ranked candidate cards to a recruiter dashboard.",
-                brand: {
-                  "@type": "Brand",
-                  name: "Hiring Hand",
-                },
-                category: "AI hiring software",
+                  "A hiring agent that interviews every applicant on video — structured, EEOC-aligned, scored against your rubric — and delivers a ranked shortlist to your desk by morning.",
+                brand: { "@type": "Brand", name: "Hiring Hand" },
+                category: "Hiring software",
               },
             ]),
           }}
         />
       </head>
       <body className="min-h-full">
-        <a
-          href="#hero"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-accent focus:text-ink focus:px-4 focus:py-2 focus:rounded-full focus:text-[12px] focus:font-mono focus:uppercase focus:tracking-[0.15em]"
-        >
-          Skip to content
-        </a>
+        <a href="#top" className="skip-link">Skip to content</a>
         {children}
       </body>
     </html>
