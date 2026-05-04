@@ -1,0 +1,1558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hiring Hand — By dawn, your shortlist is on your desk.</title>
+<meta name="description" content="Jordan handles every first-round interview on video — structured, EEOC-aligned, scored on tape. By morning, the shortlist (and the tape) is on your desk." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300..700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300..700&display=swap" rel="stylesheet" />
+
+<style>
+/* ==============================================================
+   TOKENS
+   ============================================================== */
+:root{
+  /* sky/text/sun colors are mutated by JS on scroll */
+  --sky-top:    #050714;
+  --sky-bot:    #0a0e22;
+  --sun-core:   rgba(255, 220, 150, 0);     /* hidden at start */
+  --sun-glow:   rgba(255, 180, 110, 0);
+  --text:       #efe7d6;     /* cream at top */
+  --cta-fg:     #181410;     /* always opposite of --text (cta uses --text as bg) */
+  --text-soft:  rgba(239,231,214,.65);
+  --text-mute:  rgba(239,231,214,.42);
+  --rule:       rgba(239,231,214,.18);
+  --card-bg:    rgba(255,253,247,0.96);
+  --card-ink:   #181410;
+
+  /* fixed brand colors */
+  --phosphor:   #6dff97;
+  --amber:      #e8a14a;
+  --rust:       #c75028;
+  --ink:        #181410;
+  --paper:      #fbf3df;
+
+  --f-display: "Newsreader", "Iowan Old Style", "Times New Roman", serif;
+  --f-body:    "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --f-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+*{ box-sizing: border-box; }
+html, body{ margin: 0; padding: 0; }
+html{ scroll-behavior: smooth; }
+body{
+  font-family: var(--f-body);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--sky-bot);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  min-height: 100vh;
+  font-feature-settings: "ss01";
+}
+a{ color: inherit; }
+button{ font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+/* ==============================================================
+   THE SKYBOX — fixed, behind everything
+   ============================================================== */
+.skybox{
+  position: fixed; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to bottom,
+      var(--sky-top) 0%,
+      var(--sky-bot) 100%
+    );
+  transition: background-color .4s linear;
+}
+
+/* horizon haze line at the bottom — the seam where dawn first appears */
+.skybox::after{
+  content:"";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 35vh;
+  background: radial-gradient(
+    ellipse 100% 100% at 50% 100%,
+    var(--sun-glow) 0%,
+    transparent 65%
+  );
+  opacity: var(--horizon-op, 0);
+  transition: opacity .4s linear;
+}
+
+/* the rising sun */
+.sun{
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  width: clamp(560px, 78vw, 1100px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, var(--sun-y, 70vh));
+  background: radial-gradient(
+    circle at 50% 50%,
+    var(--sun-core) 0%,
+    var(--sun-glow) 38%,
+    transparent 62%
+  );
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(2px);
+  transition: transform .4s linear;
+}
+
+/* film grain */
+.skybox::before{
+  content:""; position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: .055;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* stars */
+.stars{
+  position: fixed; inset: 0;
+  z-index: 0; pointer-events: none;
+  opacity: var(--stars-op, 1);
+  transition: opacity .4s linear;
+}
+.star{
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation: twinkle 5s ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%, 100%{ opacity: var(--o, .4); transform: scale(1); }
+  50%{ opacity: 1; transform: scale(1.3); }
+}
+
+/* page content sits above the skybox */
+main, header, footer{ position: relative; z-index: 2; }
+
+::selection{ background: var(--phosphor); color: var(--ink); }
+
+/* ==============================================================
+   HEADER
+   ============================================================== */
+.head{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 60;
+  padding: 22px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  pointer-events: none;
+}
+.head > *{ pointer-events: auto; }
+.wm{
+  font-family: var(--f-display);
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 60;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  text-decoration: none;
+  display: inline-flex; align-items: baseline; gap: 10px;
+}
+.wm .dot{
+  display:inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 10px var(--amber);
+  margin-right: 4px;
+}
+.head .clock{
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  letter-spacing: .14em;
+  color: var(--text);
+  display: inline-flex; align-items: center; gap: 12px;
+}
+.head .clock .live{
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--phosphor);
+  box-shadow: 0 0 8px var(--phosphor);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+.head .clock .label{
+  color: var(--text-mute);
+  text-transform: uppercase;
+}
+.head .pilot{
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  padding: 9px 16px;
+  border: 1px solid var(--text);
+  border-radius: 999px;
+  transition: background .25s, color .25s;
+}
+.head .pilot:hover{ background: var(--text); color: var(--cta-fg); }
+@keyframes pulse{ 0%,100%{ opacity:.5 } 50%{ opacity:1 } }
+
+/* progress rail (right edge — vertical scroll indicator) */
+.rail{
+  position: fixed; right: 22px; top: 50%;
+  transform: translateY(-50%);
+  z-index: 60;
+  height: 240px;
+  width: 1px;
+  background: var(--rule);
+  pointer-events: none;
+}
+.rail::after{
+  content:""; position:absolute; left:-1px; top:0;
+  width: 3px; background: var(--text);
+  height: calc(var(--scroll, 0) * 100%);
+  transition: height .15s linear, background-color .4s linear;
+}
+.rail .ticks{
+  position: absolute; top: 0; bottom: 0; left: 8px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  font-family: var(--f-mono);
+  font-size: 9.5px; letter-spacing: .14em;
+  color: var(--text-mute);
+}
+
+/* ==============================================================
+   PAGE LAYOUT
+   ============================================================== */
+section{
+  position: relative;
+  padding: 16vh 32px;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.kicker{
+  font-family: var(--f-mono);
+  font-size: 11px; letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 28px;
+  display: inline-flex; align-items: center; gap: 12px;
+}
+.kicker .dash{
+  display: inline-block; width: 28px; height: 1px; background: currentColor;
+  opacity: .7;
+}
+
+.display{
+  font-family: var(--f-display);
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 72;
+  font-weight: 400;
+  font-size: clamp(48px, 8vw, 132px);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  margin: 0;
+  color: var(--text);
+}
+.display .accent{ color: var(--amber); font-weight: 500; }
+.display .quiet{ color: var(--text-soft); font-weight: 300; }
+
+h2.section-h{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 60;
+  font-weight: 400;
+  font-size: clamp(36px, 5.4vw, 72px);
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  margin: 0 0 40px;
+  max-width: 22ch;
+  color: var(--text);
+}
+
+p.lede{
+  font-family: var(--f-body);
+  font-size: clamp(17px, 1.4vw, 20px);
+  line-height: 1.55;
+  color: var(--text-soft);
+  max-width: 52ch;
+  margin: 28px 0 36px;
+  font-weight: 400;
+}
+
+/* Buttons */
+.cta{
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 18px 28px 18px 30px;
+  background: var(--text);
+  color: var(--cta-fg);
+  border-radius: 999px;
+  text-decoration: none;
+  font-family: var(--f-mono);
+  font-size: 12.5px; letter-spacing: .18em;
+  text-transform: uppercase; font-weight: 600;
+  transition: padding .35s cubic-bezier(.65,0,.35,1), background-color .4s linear, color .4s linear;
+  position: relative; overflow: hidden;
+}
+.cta::before{
+  content:""; position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 35%, rgba(109,255,151,.32) 50%, transparent 65%);
+  transform: translateX(-100%);
+  transition: transform .9s cubic-bezier(.65,0,.35,1);
+}
+.cta:hover::before{ transform: translateX(100%); }
+.cta:hover{ padding-right: 36px; }
+.cta .arrow{
+  display: inline-block;
+  width: 24px; height: 8px;
+  position: relative;
+  transition: transform .35s;
+}
+.cta .arrow::before{
+  content:""; position: absolute; left: 0; top: 50%;
+  width: 100%; height: 1.5px;
+  background: currentColor;
+  transform: translateY(-50%);
+}
+.cta .arrow::after{
+  content:""; position: absolute; right: 0; top: 50%;
+  width: 8px; height: 8px;
+  border-right: 1.5px solid currentColor;
+  border-top: 1.5px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+}
+.cta:hover .arrow{ transform: translateX(6px); }
+
+/* ==============================================================
+   HERO  ────  11 PM
+   ============================================================== */
+.hero{
+  min-height: 100vh;
+  padding: 0 32px;
+  display: flex; flex-direction: column; justify-content: center;
+  max-width: 1240px;
+}
+.hero-stamp{
+  font-family: var(--f-mono);
+  font-size: 11px; letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 36px;
+  display: inline-flex; align-items: center; gap: 14px;
+}
+.hero-stamp .swatch{
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 12px var(--amber);
+}
+
+.hero h1{
+  font-family: var(--f-display);
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(54px, 9.6vw, 168px);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  margin: 0 0 36px;
+  max-width: 18ch;
+}
+.hero h1 .a{
+  color: var(--amber);
+  font-weight: 500;
+  position: relative;
+  white-space: nowrap;
+}
+.hero h1 .a::after{
+  content:"";
+  position: absolute; left: 0; right: 0; bottom: -.05em;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--amber) 20%, var(--amber) 80%, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: underline 1.6s cubic-bezier(.65,0,.35,1) 1.6s forwards;
+}
+@keyframes underline{ to{ transform: scaleX(1); } }
+
+.hero p{
+  font-size: clamp(17px, 1.5vw, 21px);
+  line-height: 1.5;
+  max-width: 50ch;
+  color: var(--text-soft);
+  margin: 0 0 44px;
+}
+
+.hero-cue{
+  position: absolute;
+  left: 32px; bottom: 36px;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  display: inline-flex; align-items: center; gap: 14px;
+  animation: hint 2.4s ease-in-out infinite;
+}
+.hero-cue .down{
+  display: inline-block;
+  width: 1px; height: 32px; background: currentColor;
+  position: relative;
+}
+.hero-cue .down::after{
+  content:""; position:absolute; left: -3px; bottom: -1px;
+  width: 7px; height: 7px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: rotate(45deg);
+}
+@keyframes hint{ 0%,100%{ transform: translateY(0); opacity: .5; } 50%{ transform: translateY(6px); opacity: 1; } }
+
+/* hero load animation — words rise */
+.hero h1 .word, .hero .lede, .hero .cta-row, .hero-stamp{
+  opacity: 0; transform: translateY(14px);
+  animation: rise 1s cubic-bezier(.2,.7,.2,1) forwards;
+}
+.hero-stamp{ animation-delay: .2s; }
+.hero h1 .word.w1{ animation-delay: .45s; }
+.hero h1 .word.w2{ animation-delay: .6s; }
+.hero h1 .word.w3{ animation-delay: .75s; }
+.hero h1 .word.w4{ animation-delay: .9s; }
+.hero .lede{ animation-delay: 1.1s; }
+.hero .cta-row{ animation-delay: 1.3s; }
+@keyframes rise{ to{ opacity: 1; transform: none; } }
+.hero h1 .word{ display: inline-block; }
+
+/* ==============================================================
+   THE NIGHT  ────  big number
+   ============================================================== */
+.night{
+  min-height: 95vh;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.night .bignum{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(120px, 22vw, 360px);
+  line-height: 0.84;
+  letter-spacing: -0.05em;
+  font-feature-settings: "tnum","lnum";
+  margin: 14px 0 24px;
+  color: var(--text);
+}
+.night .bignum-label{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 36;
+  font-weight: 400;
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.3;
+  max-width: 30ch;
+  color: var(--text-soft);
+  margin: 0;
+}
+.night .bignum-label .em{
+  color: var(--text); font-weight: 500;
+}
+.night .bignum-tail{
+  display: flex; gap: 36px;
+  margin-top: 64px;
+  border-top: 1px solid var(--rule);
+  padding-top: 22px;
+  flex-wrap: wrap;
+  font-family: var(--f-mono);
+  font-size: 11px; letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.night .bignum-tail .v{
+  color: var(--text);
+  font-family: var(--f-mono);
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+/* ==============================================================
+   THE METHOD  ────  3 spare cards
+   ============================================================== */
+.method{ padding-bottom: 22vh; }
+.method-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+.method-card{
+  padding: 36px 28px 36px 0;
+  border-bottom: 1px solid var(--rule);
+  border-right: 1px solid var(--rule);
+  padding-left: 32px;
+  position: relative;
+  transition: transform .4s ease;
+}
+.method-card:last-child{ border-right: 0; }
+.method-card .step{
+  font-family: var(--f-mono);
+  font-size: 11px; letter-spacing: .22em;
+  text-transform: uppercase; font-weight: 600;
+  color: var(--amber);
+  display: inline-flex; align-items: center; gap: 12px;
+  margin-bottom: 24px;
+}
+.method-card .step::after{
+  content:""; display:inline-block; width: 38px; height: 1px;
+  background: var(--amber);
+}
+.method-card h3{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 60;
+  font-weight: 500;
+  font-size: 30px; line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin: 0 0 14px;
+  color: var(--text);
+}
+.method-card p{
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--text-soft);
+  max-width: 32ch;
+  margin: 0;
+}
+
+/* ==============================================================
+   AN EXCHANGE  ────  transcript card
+   ============================================================== */
+.exchange{ padding-bottom: 22vh; }
+.exchange-card{
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 0;
+  border: 1px solid var(--rule);
+  background: rgba(255, 251, 240, 0.04);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.exchange-card .left{
+  padding: 36px 40px 40px;
+  border-right: 1px solid var(--rule);
+}
+.exchange-card .meta-row{
+  display: flex; justify-content: space-between;
+  font-family: var(--f-mono); font-size: 10.5px;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--text-mute);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 14px; margin-bottom: 24px;
+  flex-wrap: wrap; gap: 12px;
+}
+
+.turn{ margin-bottom: 22px; }
+.turn .who{
+  font-family: var(--f-mono);
+  font-size: 10.5px; letter-spacing: .22em;
+  text-transform: uppercase; font-weight: 600;
+  color: var(--amber);
+  margin-bottom: 6px;
+}
+.turn .who.candidate{ color: var(--text-mute); }
+.turn .text{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 36;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.turn .text .hl{
+  background: linear-gradient(transparent 60%, rgba(232,161,74,.35) 60%);
+  padding: 0 2px;
+}
+
+.exchange-card .right{
+  padding: 36px 32px 40px;
+  display: flex; flex-direction: column;
+}
+.exchange-card .right h4{
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--text-soft);
+  margin: 0 0 22px;
+  font-weight: 500;
+}
+.crit{
+  border-top: 1px solid var(--rule);
+  padding: 14px 0;
+}
+.crit:first-of-type{ border-top: 0; padding-top: 0; }
+.crit-row{
+  display: flex; justify-content: space-between;
+  align-items: baseline; gap: 12px;
+  margin-bottom: 6px;
+}
+.crit-name{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 36;
+  font-size: 16px; font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.005em;
+}
+.crit-pts{
+  font-family: var(--f-mono);
+  font-weight: 600; font-size: 12px;
+  color: var(--text);
+  font-feature-settings: "tnum";
+}
+.crit-pts .max{ color: var(--text-mute); margin-left: 1px; }
+.crit-bar{
+  height: 3px; width: 100%;
+  background: rgba(255,255,255,.1);
+  position: relative; overflow: hidden;
+  margin-top: 4px;
+}
+.crit-bar > i{
+  position: absolute; inset: 0 auto 0 0;
+  background: var(--amber);
+  display: block;
+}
+.crit-total{
+  margin-top: auto;
+  padding-top: 22px;
+  border-top: 1px solid var(--text);
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.crit-total .label{
+  font-family: var(--f-mono); font-size: 10.5px;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--text-soft);
+}
+.crit-total .v{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 500;
+  font-size: 56px;
+  line-height: .88;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  font-feature-settings: "tnum";
+}
+.crit-total .v .denom{
+  font-family: var(--f-mono);
+  font-weight: 500; font-size: 14px;
+  color: var(--text-mute);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.verdict{
+  margin-top: 18px;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
+  border: 1px solid var(--phosphor);
+  color: var(--phosphor);
+  font-family: var(--f-mono);
+  font-size: 10.5px; letter-spacing: .2em;
+  text-transform: uppercase; font-weight: 600;
+  align-self: flex-start;
+}
+.verdict::before{
+  content:""; width: 6px; height: 6px; background: var(--phosphor); border-radius: 50%;
+  box-shadow: 0 0 8px var(--phosphor);
+}
+
+/* ==============================================================
+   THE BRIEF  ────  morning paper
+   ============================================================== */
+.brief{ padding-bottom: 20vh; }
+.brief-paper{
+  background: var(--card-bg);
+  color: var(--card-ink);
+  border-radius: 4px;
+  padding: 36px 40px 42px;
+  box-shadow: 0 50px 120px -50px rgba(0,0,0,.45);
+  position: relative;
+}
+.brief-paper::before, .brief-paper::after{
+  content:""; position:absolute; left: 22px; right: 22px; height: 1px;
+  background: var(--card-ink);
+}
+.brief-paper::before{ top: 14px; }
+.brief-paper::after{ bottom: 14px; }
+
+.brief-head{
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 24px;
+  border-bottom: 1px solid var(--card-ink);
+  padding-bottom: 16px;
+  margin-bottom: 26px;
+}
+.brief-head .l, .brief-head .r{
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(24,20,16,.65);
+}
+.brief-head .r{ text-align: right; }
+.brief-head h3{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  margin: 0; text-align: center;
+  color: var(--card-ink);
+}
+.brief-head h3 .a{ color: var(--rust); font-weight: 500; }
+
+.brief-stats{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid rgba(24,20,16,.18);
+  margin-bottom: 26px;
+}
+.brief-stats .s{
+  padding: 14px 16px;
+  border-right: 1px solid rgba(24,20,16,.18);
+}
+.brief-stats .s:last-child{ border-right: 0; }
+.brief-stats .s .l{
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(24,20,16,.55); margin-bottom: 5px;
+}
+.brief-stats .s .v{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 96;
+  font-weight: 500;
+  font-size: 30px; letter-spacing: -0.02em;
+  line-height: 1; color: var(--card-ink);
+  font-feature-settings: "tnum";
+}
+
+.brief-table{ width: 100%; border-collapse: collapse; }
+.brief-table th{
+  text-align: left; padding: 10px 10px;
+  font-family: var(--f-mono); font-size: 10.5px;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: rgba(24,20,16,.55); font-weight: 500;
+  border-bottom: 1px solid var(--card-ink);
+}
+.brief-table td{
+  padding: 14px 10px;
+  border-bottom: 1px solid rgba(24,20,16,.16);
+  vertical-align: middle;
+}
+.brief-table tr:last-child td{ border-bottom: 0; }
+.brief-table tr:hover td{ background: rgba(24,20,16,.04); }
+.brief-table .rk{
+  font-family: var(--f-mono);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--rust);
+  letter-spacing: .04em;
+  width: 40px;
+}
+.brief-table .nm{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 36;
+  font-size: 17px; font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--card-ink);
+}
+.brief-table .nm small{
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 10px; letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(24,20,16,.55);
+  margin-top: 2px; font-weight: 500;
+}
+.brief-table .one{
+  font-family: var(--f-body);
+  font-size: 14px;
+  color: rgba(24,20,16,.78);
+  max-width: 32ch; line-height: 1.4;
+}
+.brief-table .vd{
+  font-family: var(--f-mono); font-weight: 600;
+  font-size: 9.5px; letter-spacing: .18em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  display: inline-block;
+}
+.brief-table .vd.go{
+  background: var(--card-ink); color: var(--phosphor);
+}
+.brief-table .vd.maybe{
+  border: 1px solid var(--rust); color: var(--rust);
+}
+.brief-table .sc{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 96;
+  font-weight: 500;
+  font-size: 28px; letter-spacing: -0.025em;
+  text-align: right;
+  font-feature-settings: "tnum";
+  color: var(--card-ink);
+}
+.brief-table .lk{
+  font-family: var(--f-mono);
+  font-size: 10.5px; letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(24,20,16,.6);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(24,20,16,.3);
+  padding-bottom: 1px;
+  transition: color .2s, border-color .2s;
+}
+.brief-table .lk:hover{ color: var(--card-ink); border-color: var(--card-ink); }
+
+.brief-foot{
+  display: flex; justify-content: space-between;
+  margin-top: 22px; padding-top: 16px;
+  border-top: 1px solid var(--card-ink);
+  font-family: var(--f-mono); font-size: 10.5px;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(24,20,16,.6);
+  flex-wrap: wrap; gap: 16px;
+}
+.brief-foot .stamp{
+  border: 1.5px solid var(--rust);
+  color: var(--rust);
+  padding: 5px 10px;
+  font-weight: 600;
+  transform: rotate(-2deg);
+}
+
+/* ==============================================================
+   MORNING  ────  CTA
+   ============================================================== */
+.morning{
+  min-height: 95vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding-top: 24vh; padding-bottom: 18vh;
+}
+.morning .display{
+  font-size: clamp(48px, 7.4vw, 120px);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  margin: 0 0 44px;
+  max-width: 22ch;
+}
+.morning .display .accent{ color: var(--rust); }
+.morning p{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 36;
+  font-size: clamp(18px, 1.7vw, 24px);
+  line-height: 1.45;
+  max-width: 50ch;
+  margin: 0 0 44px;
+  color: var(--text-soft);
+  font-weight: 400;
+}
+.morning .cta-row{
+  display: flex; align-items: center; gap: 26px;
+  flex-wrap: wrap;
+}
+.morning .secondary{
+  font-family: var(--f-mono);
+  font-size: 12px; letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color .25s, text-underline-offset .25s;
+}
+.morning .secondary:hover{
+  text-decoration-color: var(--text);
+  text-underline-offset: 9px;
+}
+
+/* ==============================================================
+   FOOTER (full daylight)
+   ============================================================== */
+footer{
+  padding: 80px 32px 40px;
+  border-top: 1px solid var(--rule);
+}
+footer .inner{
+  max-width: 1240px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+}
+footer h5{
+  font-family: var(--f-mono);
+  font-size: 10.5px; letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin: 0 0 16px;
+  font-weight: 500;
+}
+footer ul{ list-style: none; padding: 0; margin: 0; }
+footer li{ margin-bottom: 9px; }
+footer li a{
+  text-decoration: none;
+  color: var(--text);
+  font-size: 14.5px;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s;
+}
+footer li a:hover{ border-bottom-color: var(--text); }
+footer .brand .logo{
+  font-family: var(--f-display);
+  font-variation-settings: "opsz" 96;
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: -0.018em;
+  line-height: 1;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+footer .brand p{
+  margin: 0;
+  font-size: 14.5px; line-height: 1.5;
+  color: var(--text-soft);
+  max-width: 36ch;
+}
+footer .colophon{
+  max-width: 1240px; margin: 56px auto 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+  display: flex; justify-content: space-between;
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--text-mute);
+  flex-wrap: wrap; gap: 16px;
+}
+
+/* ==============================================================
+   REVEAL ON SCROLL
+   ============================================================== */
+.reveal{
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 1s ease, transform 1s cubic-bezier(.2,.7,.2,1);
+}
+.reveal.in{ opacity: 1; transform: none; }
+.reveal-1{ transition-delay: .05s; }
+.reveal-2{ transition-delay: .15s; }
+.reveal-3{ transition-delay: .25s; }
+.reveal-4{ transition-delay: .35s; }
+.reveal-5{ transition-delay: .45s; }
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration: .01ms !important;
+    transition-duration: .15s !important;
+  }
+}
+
+/* ==============================================================
+   RESPONSIVE
+   ============================================================== */
+@media (max-width: 980px){
+  section{ padding: 14vh 22px; }
+  .hero{ padding: 0 22px; }
+  .head{ padding: 18px 22px; }
+  .rail{ display: none; }
+  .method-grid{ grid-template-columns: 1fr; }
+  .method-card{ border-right: 0; }
+  .exchange-card{ grid-template-columns: 1fr; }
+  .exchange-card .left{ border-right: 0; border-bottom: 1px solid var(--rule); }
+  .brief-stats{ grid-template-columns: 1fr 1fr; }
+  .brief-stats .s{ border-bottom: 1px solid rgba(24,20,16,.18); }
+  .brief-stats .s:nth-child(2){ border-right: 0; }
+  footer .inner{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px){
+  .head .clock .label{ display: none; }
+  .head .pilot{ display: none; }
+  .brief-paper{ padding: 22px 18px 28px; }
+  .brief-table .one{ display: none; }
+  .brief-table .vd{ display: none; }
+  .brief-table th:nth-child(3), .brief-table th:nth-child(4){ display: none; }
+  .exchange-card .left, .exchange-card .right{ padding: 24px 22px; }
+  footer .inner{ grid-template-columns: 1fr; }
+  footer .colophon{ flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================== -->
+<!-- SKYBOX (fixed background)                                       -->
+<!-- ============================================================== -->
+<div class="skybox" aria-hidden="true"></div>
+<div class="stars" id="stars" aria-hidden="true"></div>
+<div class="sun" aria-hidden="true"></div>
+
+<!-- ============================================================== -->
+<!-- HEADER                                                          -->
+<!-- ============================================================== -->
+<header class="head">
+  <a href="#top" class="wm"><span class="dot"></span>Hiring Hand</a>
+  <div class="clock"><span class="live"></span><span class="label">EST</span> <span class="js-clock">11:00 PM</span></div>
+  <a href="#book" class="pilot">Book a call</a>
+</header>
+
+<div class="rail" aria-hidden="true">
+  <div class="ticks">
+    <span>11 PM</span>
+    <span>3 AM</span>
+    <span>6 AM</span>
+    <span>9 AM</span>
+  </div>
+</div>
+
+<main id="top">
+
+  <!-- ============================================================== -->
+  <!-- HERO  ────  11 PM                                                -->
+  <!-- ============================================================== -->
+  <section class="hero">
+    <div class="hero-stamp">
+      <span class="swatch"></span>
+      Hiring Hand · first-round interviews, handled
+    </div>
+
+    <h1>
+      <span class="word w1">By</span>
+      <span class="word w2">dawn,</span><br>
+      <span class="word w3">your shortlist</span><br>
+      <span class="word w4"><span class="a">is on your desk.</span></span>
+    </h1>
+
+    <p class="lede">
+      Stop losing your week to phone screens. Every applicant gets a real video interview the same day, scored against your rubric &mdash; so by morning you have a ranked shortlist, and the tape behind every call.
+    </p>
+
+    <div class="cta-row">
+      <a href="#book" class="cta">
+        Book a call
+        <span class="arrow"></span>
+      </a>
+    </div>
+
+    <div class="hero-cue">
+      <span class="down"></span>
+      Scroll to dawn
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- THE NIGHT  ────  big number                                      -->
+  <!-- ============================================================== -->
+  <section class="night">
+    <div class="kicker reveal"><span class="dash"></span> 01 · The promise</div>
+    <h2 class="section-h reveal reveal-1" style="max-width:26ch">
+      You can't interview everyone. <span style="color:var(--amber)">Jordan can.</span>
+    </h2>
+    <p class="bignum-label reveal reveal-2" style="font-size:clamp(20px,1.8vw,26px); max-width:50ch">
+      Most teams interview the top of the stack and hope. Hiring Hand interviews the whole stack &mdash; on the candidate's schedule, on your rubric, with the video and transcript saved for review. The good ones stop falling through the cracks.
+    </p>
+
+    <div class="bignum-tail reveal reveal-3">
+      <span>Mode<span class="v">Live video, two-way</span></span>
+      <span>Recruiter time spent in the call<span class="v">0 min</span></span>
+      <span>Output<span class="v">Tape · Transcript · Score</span></span>
+      <span>Audit trail<span class="v">Saved for review</span></span>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- THE METHOD  ────  3 cards                                        -->
+  <!-- ============================================================== -->
+  <section class="method" id="method">
+    <div class="kicker reveal"><span class="dash"></span> 02 · The method</div>
+    <h2 class="section-h reveal reveal-1">An interview, not a form.</h2>
+
+    <div class="method-grid">
+      <article class="method-card reveal reveal-1">
+        <div class="step">Stage 01</div>
+        <h3>Intake</h3>
+        <p>Résumé arrives via your ATS or careers page. Jordan parses it, picks the gaps worth asking about.</p>
+      </article>
+      <article class="method-card reveal reveal-2">
+        <div class="step">Stage 02</div>
+        <h3>Conversation</h3>
+        <p>Live face-to-face video interview &mdash; a calibrated set of questions, follow-ups when answers are thin, the same rubric for every candidate.</p>
+      </article>
+      <article class="method-card reveal reveal-3">
+        <div class="step">Stage 03</div>
+        <h3>Score</h3>
+        <p>Each answer graded against the rubric you signed off on. Strengths cited verbatim, concerns flagged with timestamps.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- EXCHANGE  ────  transcript                                       -->
+  <!-- ============================================================== -->
+  <section class="exchange" id="interview">
+    <div class="kicker reveal"><span class="dash"></span> 03 · An exchange, from a sample tape</div>
+    <h2 class="section-h reveal reveal-1">Sandra Mills, F&amp;I.</h2>
+
+    <div class="exchange-card reveal reveal-2">
+      <div class="left">
+        <div class="meta-row">
+          <span>FILE · Mills_S_F&amp;I_2026-03-04.txt</span>
+          <span>Q&nbsp;07 OF 15 · 11:32 AM</span>
+        </div>
+
+        <div class="turn">
+          <div class="who">Jordan</div>
+          <div class="text">
+            You've spent eight years selling F&amp;I products into one of the worst markets dealers have seen. Walk me through a deal you almost lost &mdash; and what you said in the box that turned it around.
+          </div>
+        </div>
+
+        <div class="turn">
+          <div class="who candidate">Sandra Mills</div>
+          <div class="text">
+            Last August. <span class="hl">Couple in their sixties, cash buyer on a used Tahoe.</span> The default move is to skip the F&amp;I pitch entirely &mdash; they're paying cash, why bother. <span class="hl">I asked them, instead, what would happen if the transmission went next March.</span> They didn't have an answer. By the time we walked through the GAP and the powertrain warranty against their actual driving pattern &mdash; Florida, towing a boat &mdash; they took both. Three thousand back of the house on a deal we almost stamped paid-in-full and walked.
+          </div>
+        </div>
+
+        <div class="turn">
+          <div class="who">Jordan</div>
+          <div class="text">
+            What's the one thing you'd want a finance director to know about you in their first week?
+          </div>
+        </div>
+
+        <div class="turn">
+          <div class="who candidate">Sandra Mills</div>
+          <div class="text">
+            That I will not lie to a customer to clear a deal. <span class="hl">I have walked away from three months of a board because the manager wanted me to bury a fee.</span> If you need that, hire someone else.
+          </div>
+        </div>
+      </div>
+
+      <div class="right">
+        <h4>Scoring · as you wrote it</h4>
+
+        <div class="crit">
+          <div class="crit-row"><div class="crit-name">Closing instinct</div><div class="crit-pts">19<span class="max">/20</span></div></div>
+          <div class="crit-bar"><i style="width:95%"></i></div>
+        </div>
+        <div class="crit">
+          <div class="crit-row"><div class="crit-name">Product knowledge</div><div class="crit-pts">18<span class="max">/20</span></div></div>
+          <div class="crit-bar"><i style="width:90%"></i></div>
+        </div>
+        <div class="crit">
+          <div class="crit-row"><div class="crit-name">Compliance posture</div><div class="crit-pts">20<span class="max">/20</span></div></div>
+          <div class="crit-bar"><i style="width:100%"></i></div>
+        </div>
+        <div class="crit">
+          <div class="crit-row"><div class="crit-name">Tenure &amp; stability</div><div class="crit-pts">17<span class="max">/20</span></div></div>
+          <div class="crit-bar"><i style="width:85%"></i></div>
+        </div>
+        <div class="crit">
+          <div class="crit-row"><div class="crit-name">Cultural fit (your spec)</div><div class="crit-pts">20<span class="max">/20</span></div></div>
+          <div class="crit-bar"><i style="width:100%"></i></div>
+        </div>
+
+        <div class="crit-total">
+          <div class="label">Composite</div>
+          <div class="v">94<span class="denom">/100</span></div>
+        </div>
+        <div class="verdict">Strong yes · Hold for hiring manager</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- THE BRIEF  ────  morning paper                                   -->
+  <!-- ============================================================== -->
+  <section class="brief" id="brief">
+    <div class="kicker reveal"><span class="dash"></span> 04 · By 9 AM</div>
+    <h2 class="section-h reveal reveal-1">On your desk.</h2>
+
+    <div class="brief-paper reveal reveal-2">
+      <div class="brief-head">
+        <div class="l">Issue 1,047 · Vol IV</div>
+        <h3>Morning Brief &mdash; <span class="a">Tuesday, Mar 4</span></h3>
+        <div class="r">Pemberton Auto Group · Tampa</div>
+      </div>
+
+      <div class="brief-stats">
+        <div class="s"><div class="l">In the funnel</div><div class="v">50</div></div>
+        <div class="s"><div class="l">Strong yes</div><div class="v">3</div></div>
+        <div class="s"><div class="l">Yes</div><div class="v">3</div></div>
+        <div class="s"><div class="l">Bottom of stack</div><div class="v">12</div></div>
+      </div>
+
+      <table class="brief-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Candidate</th>
+            <th>One-line strength</th>
+            <th>Verdict</th>
+            <th style="text-align:right">Score</th>
+            <th style="text-align:right">Tape</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="rk">01</td>
+            <td class="nm">Sandra Mills<small>F&amp;I · 8 yrs</small></td>
+            <td class="one">"I will not lie to a customer to clear a deal."</td>
+            <td><span class="vd go">Strong yes</span></td>
+            <td class="sc">94</td>
+            <td style="text-align:right"><a href="#" class="lk">Tape ↗</a></td>
+          </tr>
+          <tr>
+            <td class="rk">02</td>
+            <td class="nm">Rachel Thompson<small>Service · 6 yrs</small></td>
+            <td class="one">Built +$140 ARO on a fixed-ops team in 90 days.</td>
+            <td><span class="vd go">Strong yes</span></td>
+            <td class="sc">91</td>
+            <td style="text-align:right"><a href="#" class="lk">Tape ↗</a></td>
+          </tr>
+          <tr>
+            <td class="rk">03</td>
+            <td class="nm">Marcus Williams<small>Sales · stair-step from BDC</small></td>
+            <td class="one">Reads buying signals well; specific deal stories.</td>
+            <td><span class="vd go">Strong yes</span></td>
+            <td class="sc">87</td>
+            <td style="text-align:right"><a href="#" class="lk">Tape ↗</a></td>
+          </tr>
+          <tr>
+            <td class="rk">04</td>
+            <td class="nm">Kevin Park<small>F&amp;I · cross-trained service</small></td>
+            <td class="one">Quiet, methodical. Likely strong with cash buyers.</td>
+            <td><span class="vd go">Yes</span></td>
+            <td class="sc">79</td>
+            <td style="text-align:right"><a href="#" class="lk">Tape ↗</a></td>
+          </tr>
+          <tr>
+            <td class="rk">05</td>
+            <td class="nm">Tyler Johnson<small>Parts · counter &amp; wholesale</small></td>
+            <td class="one">Knows wholesale cadence; could grow into a manager.</td>
+            <td><span class="vd go">Yes</span></td>
+            <td class="sc">76</td>
+            <td style="text-align:right"><a href="#" class="lk">Tape ↗</a></td>
+          </tr>
+          <tr>
+            <td class="rk">06</td>
+            <td class="nm">Brittany Chen<small>Sales · CDJR background</small></td>
+            <td class="one">Strong CRM hygiene; turns leads into appointments.</td>
+            <td><span class="vd go">Yes</span></td>
+            <td class="sc">74</td>
+            <td style="text-align:right"><a href="#" class="lk">Tape ↗</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="brief-foot">
+        <div>50 interviewed · 6 advanced · 12 explained · 32 bottom of stack</div>
+        <div class="stamp">Reviewed by Jordan · 8:42 AM</div>
+        <div>Lisa's calendar · 6 holds posted</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- MORNING  ────  CTA                                                -->
+  <!-- ============================================================== -->
+  <section class="morning" id="book">
+    <div class="kicker reveal"><span class="dash"></span> 05 · 9:00 AM</div>
+    <h1 class="display reveal reveal-1">
+      Try it on your <span class="accent">real roles.</span>
+    </h1>
+    <p class="reveal reveal-2">
+      Bring us one open req &mdash; we'll wire Jordan to your rubric, point him at your applicants, and you'll have ranked tape on your desk by morning. No long contract; talk to us first.
+    </p>
+    <div class="cta-row reveal reveal-3">
+      <a href="#" class="cta">
+        Book a call
+        <span class="arrow"></span>
+      </a>
+      <a href="#interview" class="secondary">Or read the sample interview</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================== -->
+<!-- FOOTER                                                          -->
+<!-- ============================================================== -->
+<footer>
+  <div class="inner">
+    <div class="brand">
+      <div class="logo">Hiring Hand</div>
+      <p>Built by Voxaris. Jordan handles every first-round interview &mdash; structured, EEOC-aligned, on video. Your team gets the ranked shortlist and the tape. The humans stay in charge of the hire.</p>
+    </div>
+    <div>
+      <h5>Product</h5>
+      <ul>
+        <li><a href="#method">The method</a></li>
+        <li><a href="#interview">Sample interview</a></li>
+        <li><a href="#brief">Morning brief</a></li>
+        <li><a href="#book">Book a call</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">Voxaris</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Biometric policy</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="colophon">
+    <span>© <span class="js-year">2026</span> Voxaris LLC · hiringhand.io</span>
+    <span>EEOC-aligned · structured interview · audit trail</span>
+  </div>
+</footer>
+
+<!-- ============================================================== -->
+<!-- SCRIPT                                                          -->
+<!-- ============================================================== -->
+<script>
+(() => {
+  // ── year stamp ──
+  document.querySelectorAll(".js-year").forEach(el => el.textContent = new Date().getFullYear());
+
+  // ── stars ──
+  const starsEl = document.getElementById("stars");
+  if (starsEl){
+    const N = 110;
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < N; i++){
+      const s = document.createElement("div");
+      s.className = "star";
+      const size = Math.random() < 0.12 ? 2 : 1;
+      const o = 0.25 + Math.random() * 0.75;
+      s.style.left = (Math.random() * 100).toFixed(2) + "vw";
+      s.style.top  = (Math.random() * 95).toFixed(2) + "vh";
+      s.style.width = s.style.height = size + "px";
+      s.style.setProperty("--o", o.toFixed(2));
+      s.style.opacity = o.toFixed(2);
+      s.style.animationDelay = (Math.random() * 5).toFixed(2) + "s";
+      s.style.animationDuration = (3.5 + Math.random() * 4).toFixed(1) + "s";
+      frag.appendChild(s);
+    }
+    starsEl.appendChild(frag);
+  }
+
+  // ── color interpolation ──
+  // Hex → [r,g,b]
+  function hex(s){
+    s = s.replace("#","");
+    return [parseInt(s.slice(0,2),16), parseInt(s.slice(2,4),16), parseInt(s.slice(4,6),16)];
+  }
+  function mix(a, b, t){
+    return [Math.round(a[0]+(b[0]-a[0])*t), Math.round(a[1]+(b[1]-a[1])*t), Math.round(a[2]+(b[2]-a[2])*t)];
+  }
+  function rgb(arr){ return `rgb(${arr[0]},${arr[1]},${arr[2]})`; }
+  function rgba(arr,a){ return `rgba(${arr[0]},${arr[1]},${arr[2]},${a})`; }
+
+  // sky color stops (top of viewport color), keyed by scroll-progress
+  // 0 = top of page, 1 = bottom of page
+  const SKY_TOP = [
+    { at: 0.00, val: hex("#050714") }, // 11pm — deep
+    { at: 0.18, val: hex("#0a0d22") }, // 1am
+    { at: 0.32, val: hex("#161538") }, // 3am
+    { at: 0.46, val: hex("#2c1f48") }, // 5am — first hint of color
+    { at: 0.58, val: hex("#5a2e4d") }, // 6am — mauve
+    { at: 0.70, val: hex("#9c4d34") }, // 7am — orange
+    { at: 0.82, val: hex("#dba26a") }, // 8am — peach
+    { at: 1.00, val: hex("#fbf2da") }, // 9am — daylight cream
+  ];
+  // sky bottom color (horizon)
+  const SKY_BOT = [
+    { at: 0.00, val: hex("#0a0e22") },
+    { at: 0.18, val: hex("#15182f") },
+    { at: 0.32, val: hex("#1f1b3a") },
+    { at: 0.46, val: hex("#3a2548") },
+    { at: 0.58, val: hex("#7a3d40") },
+    { at: 0.70, val: hex("#cb6a36") },
+    { at: 0.82, val: hex("#f0c887") },
+    { at: 1.00, val: hex("#fbf2da") },
+  ];
+  // sun core / glow (alpha goes from 0 → strong)
+  const SUN_CORE = [
+    { at: 0.00, val: [255, 220, 150], a: 0   },
+    { at: 0.40, val: [255, 220, 150], a: 0   },
+    { at: 0.55, val: [255, 215, 145], a: .55 },
+    { at: 0.70, val: [255, 230, 170], a: .85 },
+    { at: 0.85, val: [255, 248, 220], a: .95 },
+    { at: 1.00, val: [255, 252, 230], a: .9  },
+  ];
+  const SUN_GLOW = [
+    { at: 0.00, val: [255, 180, 110], a: 0   },
+    { at: 0.40, val: [255, 180, 110], a: 0   },
+    { at: 0.55, val: [255, 175, 100], a: .35 },
+    { at: 0.70, val: [255, 195, 130], a: .55 },
+    { at: 0.85, val: [255, 220, 175], a: .55 },
+    { at: 1.00, val: [255, 230, 200], a: .4  },
+  ];
+  // text color
+  const TEXT = [
+    { at: 0.00, val: hex("#efe7d6") },
+    { at: 0.62, val: hex("#efe7d6") },
+    { at: 0.74, val: hex("#80684b") },
+    { at: 0.86, val: hex("#3a2c1c") },
+    { at: 1.00, val: hex("#181410") },
+  ];
+  // CTA foreground: must always be opposite of --text (which is the CTA's bg)
+  const CTA_FG = [
+    { at: 0.00, val: hex("#181410") },  // dark text on cream button at top
+    { at: 0.62, val: hex("#181410") },
+    { at: 0.86, val: hex("#fbf2da") },
+    { at: 1.00, val: hex("#fbf2da") },  // cream text on ink button at bottom
+  ];
+  const TEXT_SOFT = [
+    { at: 0.00, val: hex("#a59f8c") },
+    { at: 0.62, val: hex("#a59f8c") },
+    { at: 0.78, val: hex("#7a6c52") },
+    { at: 1.00, val: hex("#5a4a36") },
+  ];
+  const TEXT_MUTE = [
+    { at: 0.00, val: hex("#7c7666") },
+    { at: 0.62, val: hex("#7c7666") },
+    { at: 0.78, val: hex("#82745a") },
+    { at: 1.00, val: hex("#7a6a52") },
+  ];
+  // rule (border) color
+  const RULE = [
+    { at: 0.00, val: hex("#3d3a2c") },
+    { at: 0.55, val: hex("#3d3a2c") },
+    { at: 0.78, val: hex("#7a6a52") },
+    { at: 1.00, val: hex("#a59778") },
+  ];
+
+  function interp(stops, t){
+    if (t <= stops[0].at) return stops[0];
+    if (t >= stops[stops.length-1].at) return stops[stops.length-1];
+    for (let i = 0; i < stops.length - 1; i++){
+      const a = stops[i], b = stops[i+1];
+      if (t >= a.at && t <= b.at){
+        const local = (t - a.at) / (b.at - a.at);
+        const out = { val: mix(a.val, b.val, local) };
+        if (a.a !== undefined) out.a = a.a + (b.a - a.a) * local;
+        return out;
+      }
+    }
+    return stops[stops.length-1];
+  }
+
+  const root = document.documentElement;
+  const sky = document.querySelector(".skybox");
+  const stars = document.getElementById("stars");
+
+  // ── time interpolation: 11:00 PM → 9:00 AM (10 hr arc) ──
+  function fmtTime(t){
+    // t is 0..1 → minutes from 23:00 to 33:00 (= 9 AM next day)
+    const totalMin = 23 * 60 + Math.floor(t * 10 * 60);
+    let hr = Math.floor(totalMin / 60) % 24;
+    const min = totalMin % 60;
+    const ampm = hr >= 12 && hr < 24 ? "PM" : "AM";
+    let h12 = hr % 12; if (h12 === 0) h12 = 12;
+    return `${h12}:${String(min).padStart(2,"0")} ${ampm}`;
+  }
+
+  // ── scroll handler ──
+  function update(){
+    const doc = document.documentElement;
+    const max = doc.scrollHeight - window.innerHeight;
+    const t = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+
+    root.style.setProperty("--scroll", t.toFixed(4));
+
+    // Sky
+    const top = interp(SKY_TOP, t).val;
+    const bot = interp(SKY_BOT, t).val;
+    sky.style.background = `linear-gradient(to bottom, ${rgb(top)} 0%, ${rgb(bot)} 100%)`;
+
+    // Sun
+    const core = interp(SUN_CORE, t);
+    const glow = interp(SUN_GLOW, t);
+    root.style.setProperty("--sun-core", rgba(core.val, core.a));
+    root.style.setProperty("--sun-glow", rgba(glow.val, glow.a));
+
+    // sun rises from below viewport (translateY 70vh) up into view (-30vh by end)
+    let sunY;
+    if (t < 0.4) sunY = 70;
+    else if (t < 0.85) sunY = 70 - ((t - 0.4) / 0.45) * 90; // 70 → -20
+    else sunY = -20 - ((t - 0.85) / 0.15) * 10; // -20 → -30
+    root.style.setProperty("--sun-y", sunY.toFixed(1) + "vh");
+
+    // Horizon glow opacity
+    const horizonOp = Math.min(1, Math.max(0, (t - 0.35) / 0.35));
+    root.style.setProperty("--horizon-op", horizonOp.toFixed(3));
+
+    // Stars
+    const starsOp = Math.max(0, 1 - t / 0.55);
+    if (stars) stars.style.setProperty("--stars-op", starsOp.toFixed(3));
+
+    // Text colors
+    root.style.setProperty("--text", rgb(interp(TEXT, t).val));
+    root.style.setProperty("--text-soft", rgb(interp(TEXT_SOFT, t).val));
+    root.style.setProperty("--text-mute", rgb(interp(TEXT_MUTE, t).val));
+    root.style.setProperty("--rule", rgb(interp(RULE, t).val));
+    root.style.setProperty("--cta-fg", rgb(interp(CTA_FG, t).val));
+
+    // Clock
+    const time = fmtTime(t);
+    document.querySelectorAll(".js-clock").forEach(el => el.textContent = time);
+  }
+  // Synchronous scroll handler — rAF throttling can be paused in some preview windows.
+  // update() is cheap (a few mixes + setProperty calls), so direct dispatch is fine.
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update, { passive: true });
+  update();
+
+  // ── reveal-on-scroll ──
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries){
+      if (e.isIntersecting){
+        e.target.classList.add("in");
+        io.unobserve(e.target);
+      }
+    }
+  }, { threshold: 0.12, rootMargin: "0px 0px -60px 0px" });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+  // ── number count-up ──
+  const countIO = new IntersectionObserver((entries) => {
+    for (const e of entries){
+      if (!e.isIntersecting) continue;
+      const el = e.target;
+      const target = parseInt(el.dataset.target, 10);
+      const t0 = performance.now();
+      const dur = 1800;
+      const fmt = n => n.toLocaleString("en-US");
+      function step(now){
+        const p = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(Math.floor(target * eased));
+        if (p < 1) requestAnimationFrame(step); else el.textContent = fmt(target);
+      }
+      requestAnimationFrame(step);
+      countIO.unobserve(el);
+    }
+  }, { threshold: 0.5 });
+  document.querySelectorAll(".js-counter").forEach(el => countIO.observe(el));
+})();
+</script>
+</body>
+</html>
