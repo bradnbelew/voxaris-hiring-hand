@@ -1,0 +1,27 @@
+Contact: mailto:security@voxaris.io
+Contact: mailto:admin@voxaris.io
+Expires: 2027-05-24T00:00:00.000Z
+Encryption: https://voxaris.io/.well-known/pgp-key.txt
+Acknowledgments: https://voxaris.io/security#acknowledgments
+Preferred-Languages: en
+Canonical: https://voxaris.io/.well-known/security.txt
+Policy: https://voxaris.io/security
+Hiring: https://voxaris.io/#contact
+
+# Voxaris coordinated-disclosure policy
+#
+# If you believe you've found a security vulnerability affecting any
+# Voxaris-operated surface — voxaris.io, audit.voxaris.io,
+# pitch.voxaris.io, talkingpostcard.io, or hiringhand.io — please
+# report it via email to security@voxaris.io.
+#
+# We aim to acknowledge reports within 2 business days and resolve
+# critical issues within 14 days. We do not currently run a paid
+# bounty program, but we will publicly credit reporters in the
+# acknowledgments section of voxaris.io/security with permission.
+#
+# Please do NOT:
+#   - publicly disclose the issue before we've had a chance to fix it
+#   - access, modify, or destroy data that doesn't belong to you
+#   - run automated scans that disrupt service
+#   - phish or social-engineer our team or customers
